@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Delete } from 'lucide-react'
 
 export default function OpponentNumberStep({ onSelect }) {
   const [number, setNumber] = useState('')
 
-  // Auto-advance after 2 digits
-  useEffect(() => {
-    if (number.length === 2) {
-      onSelect(parseInt(number))
-    }
-  }, [number])
-
   const handleDigitClick = (digit) => {
-    setNumber(number + digit)
+    const newNumber = number + digit
+    // Auto-advance immediately after 2 digits
+    if (newNumber.length === 2) {
+      onSelect(parseInt(newNumber))
+    } else {
+      setNumber(newNumber)
+    }
   }
 
   const handleBackspace = () => {
