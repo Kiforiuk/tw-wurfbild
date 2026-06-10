@@ -21,10 +21,37 @@ export default function StatisticsTab({ shots }) {
     return { goals, saved, missed, successRate, total: playerShots.length }
   }
 
+  // Calculate heat-map data (81 fields: 9x9)
+  const calculateHeatMap = () => {
+    const heatMap = {}
+
+    playerShots.forEach(shot => {
+      const key = `${shot.goalTargetMacro}-${shot.goalTargetMicro}`
+      heatMap[key] = (heatMap[key] || 0) + 1
+    })
+
+    return heatMap
+  }
+
+  // Get color based on shot count
+  const getColor = (count) => {
+    if (count === 0) return 'bg-gray-700'
+    if (count <= 3) return 'bg-blue-700'
+    if (count <= 6) return 'bg-yellow-600'
+    return 'bg-red-600'
+  }
+
   const stats = calculateStats()
+  const heatMap = calculateHeatMap()
+
+  const zoneLabels = {
+    1: 'OL', 2: 'OM', 3: 'OR',
+    4: 'ML', 5: 'MM', 6: 'MR',
+    7: 'UL', 8: 'UM', 9: 'UR'
+  }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold mb-8">📊 Statistik nach Werfer</h2>
 
       {shots.length === 0 ? (
@@ -71,13 +98,64 @@ export default function StatisticsTab({ shots }) {
                 </div>
 
                 <div className="bg-red-900 border border-red-700 rounded-lg p-6 text-center">
-                  <p className="text-gray-300 text-sm font-semibold mb-2">ERFOLGQUOTE</p>
+                  <p className="text-gray-300 text-sm font-semibold mb-2">ERFOLGSQUOTE</p>
                   <p className="text-4xl font-bold text-red-400">{stats.successRate}%</p>
                 </div>
               </div>
 
+              {/* Heat-Map: 9x9 Grid showing all 81 fields */}
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
+                <h3 className="text-2xl font-bold mb-6">🔥 Schuss-Heatmap (Alle 81 Zonen)</h3>
+
+                <div className="mb-4 flex gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-gray-700 border border-gray-600"></div>
+                    <span>0 Schüsse</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-blue-700 border border-gray-600"></div>
+                    <span>1-3 Schüsse</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-yellow-600 border border-gray-600"></div>
+                    <span>4-6 Schüsse</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-red-600 border border-gray-600"></div>
+                    <span>7+ Schüsse</span>
+                  </div>
+                </div>
+
+                {/* 3x3 Grid of 3x3 Grids = 9x9 */}
+                <div className="inline-grid gap-1 p-4 bg-gray-900 rounded-lg">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(macroZone => (
+                    <div key={macroZone} className="flex gap-1">
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(microZone => {
+                        const key = `${macroZone}-${microZone}`
+                        const count = heatMap[key] || 0
+                        const color = getColor(count)
+
+                        return (
+                          <div
+                            key={key}
+                            className={`w-12 h-12 flex items-center justify-center rounded border border-gray-600 font-bold text-white text-sm ${color} cursor-pointer transition hover:opacity-80`}
+                            title={`Zone ${macroZone}-${microZone}: ${count} Schüsse`}
+                          >
+                            {count > 0 ? count : '-'}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-gray-400 text-sm mt-4">
+                  Jedes Feld zeigt eine grobe Zone (1-9) × feine Zone (1-9). Farben basieren auf Schusshäufigkeit.
+                </p>
+              </div>
+
               {/* Detailed Shots Table */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-x-auto">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-x-auto mb-8">
                 <h3 className="text-xl font-bold mb-4">Alle Würfe von Werfer #{selectedPlayer}</h3>
                 <table className="w-full text-sm">
                   <thead>
@@ -99,7 +177,7 @@ export default function StatisticsTab({ shots }) {
                         <td className="px-4 py-3">TW {shot.goalie}</td>
                         <td className="px-4 py-3">{shot.shotPosition}</td>
                         <td className="px-4 py-3">
-                          <span className="bg-gray-700 px-2 py-1 rounded text-xs">{shot.goalTargetMacro}</span>
+                          <span className="bg-gray-700 px-2 py-1 rounded text-xs">{zoneLabels[shot.goalTargetMacro]}</span>
                         </td>
                         <td className="px-4 py-3">
                           <span className="bg-gray-700 px-2 py-1 rounded text-xs">{shot.goalTargetMicro}</span>
@@ -124,7 +202,7 @@ export default function StatisticsTab({ shots }) {
               </div>
 
               {/* Statistics Summary */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
                   <p className="text-gray-400 text-sm mb-2">Nach Position</p>
                   <div className="space-y-2">
@@ -149,7 +227,7 @@ export default function StatisticsTab({ shots }) {
                       const zoneGoals = zoneShots.filter(s => s.outcome === 'Tor').length
                       return (
                         <div key={zone} className="flex justify-between text-sm">
-                          <span className="font-semibold">Zone {zone}:</span>
+                          <span className="font-semibold">{zoneLabels[zone]}:</span>
                           <span>{zoneGoals}/{zoneShots.length}</span>
                         </div>
                       )
