@@ -1,8 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Delete } from 'lucide-react'
 
 export default function OpponentNumberStep({ onSelect }) {
   const [number, setNumber] = useState('')
+
+  // Auto-advance after 2 digits
+  useEffect(() => {
+    if (number.length === 2) {
+      onSelect(parseInt(number))
+    }
+  }, [number, onSelect])
 
   const handleDigitClick = (digit) => {
     setNumber(number + digit)
@@ -10,12 +17,6 @@ export default function OpponentNumberStep({ onSelect }) {
 
   const handleBackspace = () => {
     setNumber(number.slice(0, -1))
-  }
-
-  const handleConfirm = () => {
-    if (number.length > 0) {
-      onSelect(parseInt(number))
-    }
   }
 
   return (
@@ -56,14 +57,10 @@ export default function OpponentNumberStep({ onSelect }) {
         </button>
       </div>
 
-      {/* OK Button */}
-      <button
-        onClick={handleConfirm}
-        disabled={number.length === 0}
-        className="w-full max-w-sm px-8 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-bold text-2xl transition touch-target"
-      >
-        OK
-      </button>
+      {/* Info: Auto-advances after 2 digits */}
+      <div className="text-gray-400 text-sm mt-6">
+        Automatisch nach 2 Ziffern →
+      </div>
 
       <style jsx>{`
         .touch-target {
