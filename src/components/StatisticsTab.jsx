@@ -21,8 +21,8 @@ export default function StatisticsTab({ shots }) {
     return { goals, saved, missed, successRate, total: playerShots.length }
   }
 
-  // Calculate heat-map data (81 fields: 9x9)
-  const calculateHeatMap = () => {
+  // Calculate heat-map data for detailed 81 fields
+  const calculateDetailHeatMap = () => {
     const heatMap = {}
 
     playerShots.forEach(shot => {
@@ -33,16 +33,50 @@ export default function StatisticsTab({ shots }) {
     return heatMap
   }
 
+  // Calculate macro zones (9 groben Zonen) with goal/shot statistics
+  const calculateMacroZoneStats = () => {
+    const stats = {}
+
+    for (let zone = 1; zone <= 9; zone++) {
+      stats[zone] = {
+        goals: 0,
+        total: 0,
+      }
+    }
+
+    playerShots.forEach(shot => {
+      const macroZone = shot.goalTargetMacro
+      stats[macroZone].total += 1
+      if (shot.outcome === 'Tor') {
+        stats[macroZone].goals += 1
+      }
+    })
+
+    return stats
+  }
+
   // Get color based on shot count
-  const getColor = (count) => {
+  const getDetailColor = (count) => {
     if (count === 0) return 'bg-gray-700'
     if (count <= 3) return 'bg-blue-700'
     if (count <= 6) return 'bg-yellow-600'
     return 'bg-red-600'
   }
 
+  // Get color for goal percentage
+  const getGoalColor = (goals, total) => {
+    if (total === 0) return 'bg-gray-700'
+    const percentage = (goals / total) * 100
+    if (percentage === 0) return 'bg-gray-600'
+    if (percentage <= 25) return 'bg-orange-700'
+    if (percentage <= 50) return 'bg-yellow-600'
+    if (percentage <= 75) return 'bg-lime-600'
+    return 'bg-green-600'
+  }
+
   const stats = calculateStats()
-  const heatMap = calculateHeatMap()
+  const detailHeatMap = calculateDetailHeatMap()
+  const macroZoneStats = calculateMacroZoneStats()
 
   const zoneLabels = {
     1: 'OL', 2: 'OM', 3: 'OR',
@@ -103,9 +137,62 @@ export default function StatisticsTab({ shots }) {
                 </div>
               </div>
 
-              {/* Heat-Map: 9x9 Grid showing all 81 fields */}
+              {/* Main Heat-Map: 3x3 Grid with Goal Statistics */}
               <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
-                <h3 className="text-2xl font-bold mb-6">🔥 Schuss-Heatmap (Alle 81 Zonen)</h3>
+                <h3 className="text-2xl font-bold mb-6">🎯 Tor-Heatmap (9 Hauptzonen)</h3>
+
+                <div className="mb-4 flex gap-4 text-sm flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-gray-600 border border-gray-500"></div>
+                    <span>0% Erfolg</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-orange-700 border border-gray-500"></div>
+                    <span>1-25%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-yellow-600 border border-gray-500"></div>
+                    <span>26-50%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-lime-600 border border-gray-500"></div>
+                    <span>51-75%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-green-600 border border-gray-500"></div>
+                    <span>76-100%</span>
+                  </div>
+                </div>
+
+                {/* 3x3 Grid of Main Zones */}
+                <div className="inline-grid gap-2 p-4 bg-gray-900 rounded-lg">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(zone => {
+                    const zoneData = macroZoneStats[zone]
+                    const goalPercentage = zoneData.total > 0 ? ((zoneData.goals / zoneData.total) * 100).toFixed(0) : 0
+                    const color = getGoalColor(zoneData.goals, zoneData.total)
+
+                    return (
+                      <div
+                        key={zone}
+                        className={`w-24 h-24 flex flex-col items-center justify-center rounded-lg border-2 border-gray-600 font-bold text-white ${color} cursor-pointer transition hover:opacity-80`}
+                        title={`${zoneLabels[zone]}: ${zoneData.goals} Tore / ${zoneData.total} Würfe`}
+                      >
+                        <div className="text-lg">{zoneLabels[zone]}</div>
+                        <div className="text-2xl font-bold">{zoneData.goals}/{zoneData.total}</div>
+                        <div className="text-sm text-gray-200">{goalPercentage}%</div>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <p className="text-gray-400 text-sm mt-4">
+                  Jedes Hauptfeld zeigt: Tore/Würfe und Erfolgsquote (%). Farben basieren auf Erfolgsquote.
+                </p>
+              </div>
+
+              {/* Detailed 81-Field Heat-Map */}
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
+                <h3 className="text-2xl font-bold mb-6">🔥 Detaillierte Schuss-Heatmap (81 Zonen)</h3>
 
                 <div className="mb-4 flex gap-4 text-sm">
                   <div className="flex items-center gap-2">
@@ -126,14 +213,14 @@ export default function StatisticsTab({ shots }) {
                   </div>
                 </div>
 
-                {/* 3x3 Grid of 3x3 Grids = 9x9 */}
+                {/* 9x9 Grid */}
                 <div className="inline-grid gap-1 p-4 bg-gray-900 rounded-lg">
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(macroZone => (
                     <div key={macroZone} className="flex gap-1">
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(microZone => {
                         const key = `${macroZone}-${microZone}`
-                        const count = heatMap[key] || 0
-                        const color = getColor(count)
+                        const count = detailHeatMap[key] || 0
+                        const color = getDetailColor(count)
 
                         return (
                           <div
@@ -150,7 +237,7 @@ export default function StatisticsTab({ shots }) {
                 </div>
 
                 <p className="text-gray-400 text-sm mt-4">
-                  Jedes Feld zeigt eine grobe Zone (1-9) × feine Zone (1-9). Farben basieren auf Schusshäufigkeit.
+                  Jedes Feld = grobe Zone (1-9) × feine Zone (1-9). Zeigt Schusshäufigkeit.
                 </p>
               </div>
 

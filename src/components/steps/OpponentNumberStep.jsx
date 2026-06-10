@@ -9,7 +9,7 @@ export default function OpponentNumberStep({ onSelect }) {
     if (number.length === 2) {
       onSelect(parseInt(number))
     }
-  }, [number, onSelect])
+  }, [number])
 
   const handleDigitClick = (digit) => {
     setNumber(number + digit)
