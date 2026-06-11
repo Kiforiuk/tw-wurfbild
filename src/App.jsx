@@ -124,66 +124,74 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-      <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-b border-slate-700 z-50 p-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
-            <h1 className="text-2xl font-bold text-blue-400">🏐 Handball TW Analyse</h1>
+      <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-b border-slate-700 z-50 p-4 md:p-6">
+        <div className="max-w-7xl mx-auto space-y-4">
+          {/* Title & Action Buttons */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <h1 className="text-2xl md:text-3xl font-bold text-blue-400">🏐 Handball TW Analyse</h1>
 
             <div className="flex gap-3 flex-wrap">
               <button
                 onClick={deleteAllWurfe}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-bold transition touch-none"
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-4 md:px-6 py-3 rounded-lg font-bold transition text-sm md:text-base min-h-[44px]"
               >
-                <Trash2 size={24} />
-                Alles Löschen
+                <Trash2 size={20} />
+                <span className="hidden sm:inline">Alles Löschen</span>
               </button>
 
-              <label className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-bold cursor-pointer transition touch-none">
-                <Upload size={24} />
-                Importieren
+              <label className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 md:px-6 py-3 rounded-lg font-bold cursor-pointer transition text-sm md:text-base min-h-[44px]">
+                <Upload size={20} />
+                <span className="hidden sm:inline">Importieren</span>
                 <input type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
               </label>
 
               <button
                 onClick={handleExport}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition touch-none"
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-4 md:px-6 py-3 rounded-lg font-bold transition text-sm md:text-base min-h-[44px]"
               >
-                <Download size={24} />
-                Exportieren
+                <Download size={20} />
+                <span className="hidden sm:inline">Exportieren</span>
               </button>
             </div>
           </div>
 
+          {/* Torwart Selection & Timer Controls */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
-            <select
-              value={currentTorwart}
-              onChange={(e) => setCurrentTorwart(e.target.value)}
-              className="bg-slate-700 border border-slate-600 text-white px-4 py-3 rounded-lg font-bold text-lg cursor-pointer"
-            >
-              <option>Pasqual</option>
-              <option>Mathi</option>
-              <option>Mitsch</option>
-            </select>
+            <div className="flex items-center gap-4">
+              <label className="text-sm font-bold text-gray-300">Torwart:</label>
+              <select
+                value={currentTorwart}
+                onChange={(e) => setCurrentTorwart(e.target.value)}
+                className="bg-slate-700 border border-slate-600 text-white px-4 py-2 md:py-3 rounded-lg font-bold text-base md:text-lg cursor-pointer min-h-[44px]"
+              >
+                <option>Pasqual</option>
+                <option>Mathi</option>
+                <option>Mitsch</option>
+              </select>
+            </div>
 
-            <div className="flex items-center gap-3">
-              <div className="bg-slate-800 border-2 border-blue-500 px-8 py-4 rounded-lg font-mono text-4xl font-bold min-w-[200px] text-center">
+            {/* Timer Display & Controls */}
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="bg-slate-800 border-2 border-blue-500 px-6 md:px-8 py-3 md:py-4 rounded-lg font-mono text-3xl md:text-4xl font-bold min-w-[140px] md:min-w-[180px] text-center">
                 {formatTime(timerSeconds)}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-1 md:gap-2 flex-wrap">
                 {!isTimerRunning ? (
                   <button
                     onClick={() => handleTimerButton('play')}
-                    className="bg-green-600 hover:bg-green-700 p-3 rounded-lg transition"
+                    className="bg-green-600 hover:bg-green-700 p-2 md:p-3 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    title="Start"
                   >
-                    <Play size={28} />
+                    <Play size={24} />
                   </button>
                 ) : (
                   <button
                     onClick={() => handleTimerButton('pause')}
-                    className="bg-yellow-600 hover:bg-yellow-700 p-3 rounded-lg transition"
+                    className="bg-yellow-600 hover:bg-yellow-700 p-2 md:p-3 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    title="Pause"
                   >
-                    <Pause size={28} />
+                    <Pause size={24} />
                   </button>
                 )}
 
@@ -191,43 +199,49 @@ export default function App() {
                   <>
                     <button
                       onClick={() => handleTimerButton('plus1s')}
-                      className="bg-blue-600 hover:bg-blue-700 px-3 py-3 rounded-lg text-sm font-bold transition"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-2 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
+                      title="+1 Sekunde"
                     >
                       +1s
                     </button>
                     <button
                       onClick={() => handleTimerButton('minus1s')}
-                      className="bg-blue-600 hover:bg-blue-700 px-3 py-3 rounded-lg text-sm font-bold transition"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-2 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
+                      title="-1 Sekunde"
                     >
                       -1s
                     </button>
                     <button
                       onClick={() => handleTimerButton('plus1m')}
-                      className="bg-blue-600 hover:bg-blue-700 px-3 py-3 rounded-lg text-sm font-bold transition"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-2 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
+                      title="+1 Minute"
                     >
                       +1m
                     </button>
                     <button
                       onClick={() => handleTimerButton('minus1m')}
-                      className="bg-blue-600 hover:bg-blue-700 px-3 py-3 rounded-lg text-sm font-bold transition"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-2 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
+                      title="-1 Minute"
                     >
                       -1m
                     </button>
                     <button
                       onClick={() => handleTimerButton('reset')}
-                      className="bg-red-600 hover:bg-red-700 p-3 rounded-lg transition"
+                      className="bg-red-600 hover:bg-red-700 p-2 md:p-3 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center"
+                      title="Zurücksetzen"
                     >
-                      <RotateCcw size={24} />
+                      <RotateCcw size={20} />
                     </button>
                   </>
                 )}
               </div>
             </div>
 
+            {/* Tab Navigation */}
             <div className="flex gap-2">
               <button
                 onClick={() => setCurrentTab('input')}
-                className={`px-6 py-3 rounded-lg font-bold text-lg transition ${
+                className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-bold text-base transition min-h-[44px] ${
                   currentTab === 'input'
                     ? 'bg-blue-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -237,7 +251,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setCurrentTab('stats')}
-                className={`px-6 py-3 rounded-lg font-bold text-lg transition ${
+                className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-bold text-base transition min-h-[44px] ${
                   currentTab === 'stats'
                     ? 'bg-blue-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -250,7 +264,7 @@ export default function App() {
         </div>
       </div>
 
-      <div className="pt-80 pb-8 px-4 max-w-7xl mx-auto">
+      <div className="pt-[320px] md:pt-[280px] pb-8 px-4 max-w-7xl mx-auto">
         {currentTab === 'input' ? (
           <InputTab
             onAddWurf={addWurf}
@@ -261,140 +275,6 @@ export default function App() {
           <StatisticsTab wurfe={wurfe} />
         )}
       </div>
-    </div>
-  )
-}
-
-  const handleStepComplete = (stepData) => {
-    const updatedShot = { ...currentShot, ...stepData }
-    setCurrentShot(updatedShot)
-
-    if (currentStep < 5) {
-      setCurrentStep(currentStep + 1)
-    } else {
-      // Save complete shot
-      const newShot = {
-        id: Date.now(),
-        timestamp: new Date().toLocaleTimeString('de-DE'),
-        matchTime: currentHalf,
-        goalie: currentGoalie,
-        shotPosition: updatedShot.shotPosition,
-        opponentNumber: updatedShot.opponentNumber,
-        goalTargetMacro: updatedShot.goalTargetMacro,
-        goalTargetMicro: updatedShot.goalTargetMicro,
-        outcome: updatedShot.outcome,
-      }
-
-      setShots([...shots, newShot])
-
-      // Reset for next shot
-      setCurrentShot({
-        shotPosition: null,
-        opponentNumber: null,
-        goalTargetMacro: null,
-        goalTargetMicro: null,
-        outcome: null,
-      })
-      setCurrentStep(1)
-    }
-  }
-
-  const handleUndo = () => {
-    if (shots.length > 0) {
-      const newShots = shots.slice(0, -1)
-      setShots(newShots)
-    }
-  }
-
-  const handleExport = () => {
-    if (shots.length === 0) {
-      alert('Keine Daten zum Exportieren!')
-      return
-    }
-
-    const headers = ['ID', 'Uhrzeit', 'Halbzeit', 'Torwart', 'Wurfposition', 'Gegner #', 'Tor Grob', 'Tor Fein', 'Ergebnis']
-    const rows = shots.map(shot => [
-      shot.id,
-      shot.timestamp,
-      shot.matchTime,
-      shot.goalie,
-      shot.shotPosition,
-      shot.opponentNumber,
-      shot.goalTargetMacro,
-      shot.goalTargetMicro,
-      shot.outcome,
-    ])
-
-    const csv = [headers, ...rows]
-      .map(row => row.join(';'))
-      .join('\n')
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const link = document.createElement('a')
-    const url = URL.createObjectURL(blob)
-    link.setAttribute('href', url)
-    link.setAttribute('download', 'handball_tw_analyse.csv')
-    link.style.visibility = 'hidden'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  const handleClearAll = () => {
-    if (window.confirm('Alle Daten löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-      setShots([])
-      setCurrentStep(1)
-      setCurrentShot({
-        shotPosition: null,
-        opponentNumber: null,
-        goalTargetMacro: null,
-        goalTargetMicro: null,
-        outcome: null,
-      })
-    }
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
-      <Header
-        currentHalf={currentHalf}
-        setCurrentHalf={setCurrentHalf}
-        currentGoalie={currentGoalie}
-        setCurrentGoalie={setCurrentGoalie}
-        onUndo={handleUndo}
-        onExport={handleExport}
-        onClearAll={handleClearAll}
-        shotCount={shots.length}
-      />
-
-      <main className="flex-1 overflow-auto p-4 md:p-8">
-        {currentStep === 1 && (
-          <ShotPositionStep
-            onSelect={(position) => handleStepComplete({ shotPosition: position })}
-          />
-        )}
-        {currentStep === 2 && (
-          <OpponentNumberStep
-            onSelect={(number) => handleStepComplete({ opponentNumber: number })}
-          />
-        )}
-        {currentStep === 3 && (
-          <GoalTargetMacroStep
-            onSelect={(zone) => handleStepComplete({ goalTargetMacro: zone })}
-          />
-        )}
-        {currentStep === 4 && (
-          <GoalTargetMicroStep
-            selectedMacro={currentShot.goalTargetMacro}
-            onSelect={(zone) => handleStepComplete({ goalTargetMicro: zone })}
-          />
-        )}
-        {currentStep === 5 && (
-          <OutcomeStep
-            onSelect={(outcome) => handleStepComplete({ outcome })}
-          />
-        )}
-      </main>
     </div>
   )
 }
