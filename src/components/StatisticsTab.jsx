@@ -1,344 +1,169 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
-export default function StatisticsTab({ shots }) {
-  const [selectedPlayer, setSelectedPlayer] = useState('')
+export default function StatisticsTab({ wurfe }) {
+  const [selectedGegenspieler, setSelectedGegenspieler] = useState(null)
 
-  // Get unique player numbers
-  const uniquePlayers = [...new Set(shots.map(s => s.opponentNumber))].sort((a, b) => a - b)
+  const gegenspielerList = useMemo(() => {
+    const unique = new Set(wurfe.map(w => w.gegenspieler))
+    return Array.from(unique).sort((a, b) => a - b)
+  }, [wurfe])
 
-  // Filter shots for selected player
-  const playerShots = selectedPlayer ? shots.filter(s => s.opponentNumber === parseInt(selectedPlayer)) : []
+  const selectedWurfe = useMemo(() => {
+    if (!selectedGegenspieler) return []
+    return wurfe.filter(w => w.gegenspieler === selectedGegenspieler)
+  }, [wurfe, selectedGegenspieler])
 
-  // Calculate statistics
-  const calculateStats = () => {
-    if (playerShots.length === 0) return null
+  const heatmapData = useMemo(() => {
+    if (!selectedGegenspieler) return {}
 
-    const goals = playerShots.filter(s => s.outcome === 'Tor').length
-    const saved = playerShots.filter(s => s.outcome === 'Gehalten').length
-    const missed = playerShots.filter(s => s.outcome === 'Vorbei/Block').length
-    const successRate = ((goals / playerShots.length) * 100).toFixed(1)
-
-    return { goals, saved, missed, successRate, total: playerShots.length }
-  }
-
-  // Calculate heat-map data for detailed 81 fields
-  const calculateDetailHeatMap = () => {
-    const heatMap = {}
-
-    playerShots.forEach(shot => {
-      const key = `${shot.goalTargetMacro}-${shot.goalTargetMicro}`
-      heatMap[key] = (heatMap[key] || 0) + 1
-    })
-
-    return heatMap
-  }
-
-  // Calculate macro zones (9 groben Zonen) with goal/shot statistics
-  const calculateMacroZoneStats = () => {
-    const stats = {}
-
-    for (let zone = 1; zone <= 9; zone++) {
-      stats[zone] = {
-        goals: 0,
-        total: 0,
-      }
+    const data = {}
+    for (let i = 1; i <= 9; i++) {
+      data[i] = { count: 0, tore: 0 }
     }
 
-    playerShots.forEach(shot => {
-      const macroZone = shot.goalTargetMacro
-      stats[macroZone].total += 1
-      if (shot.outcome === 'Tor') {
-        stats[macroZone].goals += 1
+    selectedWurfe.forEach(w => {
+      if (data[w.macroZone]) {
+        data[w.macroZone].count++
+        if (w.ergebnis === 'tor') data[w.macroZone].tore++
       }
     })
 
-    return stats
+    return data
+  }, [selectedWurfe])
+
+  const getHeatmapColor = (count) => {
+    if (count === 0) return 'bg-green-900'
+    if (count <= 3) return 'bg-yellow-700'
+    return 'bg-red-700'
   }
 
-  // Get color based on shot count
-  const getDetailColor = (count) => {
-    if (count === 0) return 'bg-gray-700'
-    if (count <= 3) return 'bg-blue-700'
-    if (count <= 6) return 'bg-yellow-600'
-    return 'bg-red-600'
-  }
+  const stats = useMemo(() => {
+    if (!selectedWurfe.length) return null
 
-  // Get color for goal percentage
-  const getGoalColor = (goals, total) => {
-    if (total === 0) return 'bg-gray-700'
-    const percentage = (goals / total) * 100
-    if (percentage === 0) return 'bg-gray-600'
-    if (percentage <= 25) return 'bg-orange-700'
-    if (percentage <= 50) return 'bg-yellow-600'
-    if (percentage <= 75) return 'bg-lime-600'
-    return 'bg-green-600'
-  }
+    const tore = selectedWurfe.filter(w => w.ergebnis === 'tor').length
+    const gehalten = selectedWurfe.filter(w => w.ergebnis === 'gehalten').length
+    const vorbei = selectedWurfe.filter(w => w.ergebnis === 'vorbei').length
+    const quote = (tore / selectedWurfe.length * 100).toFixed(1)
 
-  const stats = calculateStats()
-  const detailHeatMap = calculateDetailHeatMap()
-  const macroZoneStats = calculateMacroZoneStats()
-
-  const zoneLabels = {
-    1: 'OL', 2: 'OM', 3: 'OR',
-    4: 'ML', 5: 'MM', 6: 'MR',
-    7: 'UL', 8: 'UM', 9: 'UR'
-  }
+    return { tore, gehalten, vorbei, quote, total: selectedWurfe.length }
+  }, [selectedWurfe])
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold mb-8">📊 Statistik nach Werfer</h2>
+    <div className="w-full">
+      <h2 className="text-3xl font-bold mb-8 text-blue-400">📊 Statistik-Auswertung</h2>
 
-      {shots.length === 0 ? (
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
-          <p className="text-xl text-gray-400">Keine Daten vorhanden. Starten Sie mit der Datenerfassung!</p>
+      {gegenspielerList.length === 0 ? (
+        <div className="bg-slate-800 border border-slate-700 p-8 rounded-lg text-center text-xl text-gray-400">
+          Noch keine Daten erfasst
         </div>
       ) : (
         <>
-          {/* Player Selector */}
           <div className="mb-8">
-            <label className="block text-lg font-semibold mb-4">Werfer wählen:</label>
+            <label className="block text-lg font-bold mb-4">Gegenspieler wählen:</label>
             <select
-              value={selectedPlayer}
-              onChange={(e) => setSelectedPlayer(e.target.value)}
-              className="w-full md:w-64 px-6 py-3 bg-gray-700 border border-gray-600 rounded text-white text-lg font-semibold"
+              value={selectedGegenspieler || ''}
+              onChange={(e) => setSelectedGegenspieler(e.target.value ? parseInt(e.target.value) : null)}
+              className="bg-slate-700 border border-slate-600 text-white px-6 py-3 rounded-lg font-bold text-lg cursor-pointer w-full md:w-64"
             >
-              <option value="">-- Bitte wählen --</option>
-              {uniquePlayers.map(player => (
-                <option key={player} value={player}>
-                  Werfer #{player}
+              <option value="">-- Wählen --</option>
+              {gegenspielerList.map(num => (
+                <option key={num} value={num}>
+                  #{num}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Statistics Display */}
-          {selectedPlayer && stats && (
+          {selectedGegenspieler && stats && (
             <>
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-blue-900 border border-blue-700 rounded-lg p-6 text-center">
-                  <p className="text-gray-300 text-sm font-semibold mb-2">WÜRFE GESAMT</p>
-                  <p className="text-4xl font-bold text-blue-400">{stats.total}</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-slate-800 p-6 rounded-lg border-l-4 border-blue-500">
+                  <div className="text-gray-400 text-sm font-bold">WÜRFE GESAMT</div>
+                  <div className="text-4xl font-bold text-blue-400">{stats.total}</div>
                 </div>
-
-                <div className="bg-green-900 border border-green-700 rounded-lg p-6 text-center">
-                  <p className="text-gray-300 text-sm font-semibold mb-2">TORE</p>
-                  <p className="text-4xl font-bold text-green-400">{stats.goals}</p>
+                <div className="bg-slate-800 p-6 rounded-lg border-l-4 border-red-500">
+                  <div className="text-gray-400 text-sm font-bold">TORE</div>
+                  <div className="text-4xl font-bold text-red-400">{stats.tore}</div>
                 </div>
-
-                <div className="bg-yellow-900 border border-yellow-700 rounded-lg p-6 text-center">
-                  <p className="text-gray-300 text-sm font-semibold mb-2">GEHALTEN</p>
-                  <p className="text-4xl font-bold text-yellow-400">{stats.saved}</p>
+                <div className="bg-slate-800 p-6 rounded-lg border-l-4 border-green-500">
+                  <div className="text-gray-400 text-sm font-bold">GEHALTEN</div>
+                  <div className="text-4xl font-bold text-green-400">{stats.gehalten}</div>
                 </div>
-
-                <div className="bg-red-900 border border-red-700 rounded-lg p-6 text-center">
-                  <p className="text-gray-300 text-sm font-semibold mb-2">ERFOLGSQUOTE</p>
-                  <p className="text-4xl font-bold text-red-400">{stats.successRate}%</p>
+                <div className="bg-slate-800 p-6 rounded-lg border-l-4 border-yellow-500">
+                  <div className="text-gray-400 text-sm font-bold">ERFOLGSQUOTE</div>
+                  <div className="text-4xl font-bold text-yellow-400">{stats.quote}%</div>
                 </div>
               </div>
 
-              {/* Main Heat-Map: 3x3 Grid with Goal Statistics */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
-                <h3 className="text-2xl font-bold mb-6">🎯 Tor-Heatmap (9 Hauptzonen)</h3>
-
-                <div className="mb-4 flex gap-4 text-sm flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gray-600 border border-gray-500"></div>
-                    <span>0% Erfolg</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-orange-700 border border-gray-500"></div>
-                    <span>1-25%</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-yellow-600 border border-gray-500"></div>
-                    <span>26-50%</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-lime-600 border border-gray-500"></div>
-                    <span>51-75%</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-green-600 border border-gray-500"></div>
-                    <span>76-100%</span>
-                  </div>
-                </div>
-
-                {/* 3x3 Grid of Main Zones */}
-                <div className="inline-grid gap-2 p-4 bg-gray-900 rounded-lg">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(zone => {
-                    const zoneData = macroZoneStats[zone]
-                    const goalPercentage = zoneData.total > 0 ? ((zoneData.goals / zoneData.total) * 100).toFixed(0) : 0
-                    const color = getGoalColor(zoneData.goals, zoneData.total)
+              <h3 className="text-2xl font-bold mb-6 text-blue-400">🎯 Wurfzonen-Heatmap</h3>
+              <div className="bg-slate-800 p-8 rounded-lg mb-8">
+                <div className="grid grid-cols-3 gap-3 max-w-md">
+                  {Array.from({ length: 9 }, (_, i) => {
+                    const zone = i + 1
+                    const data = heatmapData[zone]
+                    const color = getHeatmapColor(data.count)
 
                     return (
                       <div
-                        key={zone}
-                        className={`w-24 h-24 flex flex-col items-center justify-center rounded-lg border-2 border-gray-600 font-bold text-white ${color} cursor-pointer transition hover:opacity-80`}
-                        title={`${zoneLabels[zone]}: ${zoneData.goals} Tore / ${zoneData.total} Würfe`}
+                        key={i}
+                        className={`${color} p-6 rounded-lg text-center border border-slate-600 transition`}
                       >
-                        <div className="text-lg">{zoneLabels[zone]}</div>
-                        <div className="text-2xl font-bold">{zoneData.goals}/{zoneData.total}</div>
-                        <div className="text-sm text-gray-200">{goalPercentage}%</div>
+                        <div className="text-sm text-gray-200">Zone {zone}</div>
+                        <div className="text-2xl font-bold text-white">{data.count}</div>
+                        <div className="text-xs text-gray-300">
+                          {data.tore}/{data.count} Tore
+                        </div>
                       </div>
                     )
                   })}
                 </div>
 
-                <p className="text-gray-400 text-sm mt-4">
-                  Jedes Hauptfeld zeigt: Tore/Würfe und Erfolgsquote (%). Farben basieren auf Erfolgsquote.
-                </p>
-              </div>
-
-              {/* Detailed 81-Field Heat-Map */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
-                <h3 className="text-2xl font-bold mb-6">🔥 Detaillierte Schuss-Heatmap (81 Zonen)</h3>
-
-                <div className="mb-4 flex gap-4 text-sm">
+                <div className="mt-6 flex gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gray-700 border border-gray-600"></div>
-                    <span>0 Schüsse</span>
+                    <div className="w-4 h-4 bg-green-900 rounded"></div>
+                    <span>0 Würfe</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-blue-700 border border-gray-600"></div>
-                    <span>1-3 Schüsse</span>
+                    <div className="w-4 h-4 bg-yellow-700 rounded"></div>
+                    <span>1-3 Würfe</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-yellow-600 border border-gray-600"></div>
-                    <span>4-6 Schüsse</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-red-600 border border-gray-600"></div>
-                    <span>7+ Schüsse</span>
+                    <div className="w-4 h-4 bg-red-700 rounded"></div>
+                    <span>4+ Würfe</span>
                   </div>
                 </div>
-
-                {/* 9x9 Grid */}
-                <div className="inline-grid gap-1 p-4 bg-gray-900 rounded-lg">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(macroZone => (
-                    <div key={macroZone} className="flex gap-1">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(microZone => {
-                        const key = `${macroZone}-${microZone}`
-                        const count = detailHeatMap[key] || 0
-                        const color = getDetailColor(count)
-
-                        return (
-                          <div
-                            key={key}
-                            className={`w-12 h-12 flex items-center justify-center rounded border border-gray-600 font-bold text-white text-sm ${color} cursor-pointer transition hover:opacity-80`}
-                            title={`Zone ${macroZone}-${microZone}: ${count} Schüsse`}
-                          >
-                            {count > 0 ? count : '-'}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-gray-400 text-sm mt-4">
-                  Jedes Feld = grobe Zone (1-9) × feine Zone (1-9). Zeigt Schusshäufigkeit.
-                </p>
               </div>
 
-              {/* Detailed Shots Table */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-x-auto mb-8">
-                <h3 className="text-xl font-bold mb-4">Alle Würfe von Werfer #{selectedPlayer}</h3>
+              <h3 className="text-2xl font-bold mb-4 text-blue-400">📋 Alle Würfe</h3>
+              <div className="overflow-x-auto bg-slate-800 rounded-lg">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">Zeit</th>
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">HZ</th>
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">TW</th>
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">Position</th>
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">Tor Grob</th>
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">Tor Fein</th>
-                      <th className="px-4 py-3 text-left font-semibold text-blue-400">Ergebnis</th>
+                    <tr className="border-b border-slate-700 bg-slate-900">
+                      <th className="p-4 text-left">Zeit</th>
+                      <th className="p-4 text-left">TW</th>
+                      <th className="p-4 text-left">Position</th>
+                      <th className="p-4 text-left">Grob</th>
+                      <th className="p-4 text-left">Fein</th>
+                      <th className="p-4 text-left">Ergebnis</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {playerShots.map((shot, idx) => (
-                      <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700 transition">
-                        <td className="px-4 py-3">{shot.timestamp}</td>
-                        <td className="px-4 py-3">{shot.matchTime}</td>
-                        <td className="px-4 py-3">TW {shot.goalie}</td>
-                        <td className="px-4 py-3">{shot.shotPosition}</td>
-                        <td className="px-4 py-3">
-                          <span className="bg-gray-700 px-2 py-1 rounded text-xs">{zoneLabels[shot.goalTargetMacro]}</span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className="bg-gray-700 px-2 py-1 rounded text-xs">{shot.goalTargetMicro}</span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`px-3 py-1 rounded font-semibold text-xs ${
-                              shot.outcome === 'Tor'
-                                ? 'bg-green-700 text-green-200'
-                                : shot.outcome === 'Gehalten'
-                                ? 'bg-yellow-700 text-yellow-200'
-                                : 'bg-red-700 text-red-200'
-                            }`}
-                          >
-                            {shot.outcome}
-                          </span>
+                    {selectedWurfe.map(w => (
+                      <tr key={w.id} className="border-b border-slate-700 hover:bg-slate-700">
+                        <td className="p-4">{w.time}</td>
+                        <td className="p-4">{w.torwart}</td>
+                        <td className="p-4">{w.wurfposition}</td>
+                        <td className="p-4">{w.macroZone}</td>
+                        <td className="p-4">{w.microZone}</td>
+                        <td className="p-4">
+                          {w.ergebnis === 'tor' && '🎯 TOR'}
+                          {w.ergebnis === 'gehalten' && '✋ GEHALTEN'}
+                          {w.ergebnis === 'vorbei' && '❌ VORBEI'}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
-
-              {/* Statistics Summary */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                  <p className="text-gray-400 text-sm mb-2">Nach Position</p>
-                  <div className="space-y-2">
-                    {[...new Set(playerShots.map(s => s.shotPosition))].map(pos => {
-                      const posShots = playerShots.filter(s => s.shotPosition === pos)
-                      const posGoals = posShots.filter(s => s.outcome === 'Tor').length
-                      return (
-                        <div key={pos} className="flex justify-between text-sm">
-                          <span className="font-semibold">{pos}:</span>
-                          <span>{posGoals}/{posShots.length}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-
-                <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                  <p className="text-gray-400 text-sm mb-2">Nach Tor-Zone (Grob)</p>
-                  <div className="space-y-2">
-                    {[...new Set(playerShots.map(s => s.goalTargetMacro))].sort((a, b) => a - b).map(zone => {
-                      const zoneShots = playerShots.filter(s => s.goalTargetMacro === zone)
-                      const zoneGoals = zoneShots.filter(s => s.outcome === 'Tor').length
-                      return (
-                        <div key={zone} className="flex justify-between text-sm">
-                          <span className="font-semibold">{zoneLabels[zone]}:</span>
-                          <span>{zoneGoals}/{zoneShots.length}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-
-                <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                  <p className="text-gray-400 text-sm mb-2">Nach Ergebnis</p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-semibold text-green-400">Tore:</span>
-                      <span>{stats.goals} ({((stats.goals / stats.total) * 100).toFixed(1)}%)</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="font-semibold text-yellow-400">Gehalten:</span>
-                      <span>{stats.saved} ({((stats.saved / stats.total) * 100).toFixed(1)}%)</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="font-semibold text-red-400">Vorbei/Block:</span>
-                      <span>{stats.missed} ({((stats.missed / stats.total) * 100).toFixed(1)}%)</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </>
           )}

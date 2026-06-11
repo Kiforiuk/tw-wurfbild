@@ -1,27 +1,33 @@
-const POSITIONS = ['LA', 'RL', 'RM', 'RR', 'RA', 'KM', '7m', 'TG']
-
 export default function ShotPositionStep({ onSelect }) {
-  return (
-    <div className="h-full flex flex-col items-center justify-center">
-      <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Wurfposition (Woher?)</h2>
+  const positions = [
+    { label: 'LA', name: 'Links Außen' },
+    { label: 'RL', name: 'Rechts Links' },
+    { label: 'RM', name: 'Rechts Mitte' },
+    { label: 'RR', name: 'Rechts Rechts' },
+    { label: 'RA', name: 'Rechts Außen' },
+    { label: 'KM', name: 'Kreis Mitte' },
+    { label: '7m', name: '7-Meter' },
+    { label: 'TG', name: 'Torwurf' }
+  ]
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full px-4">
-        {POSITIONS.map((position) => (
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <h2 className="text-4xl font-bold mb-12 text-center text-blue-400">
+        📍 Wurfposition (Woher?)
+      </h2>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full">
+        {positions.map((pos) => (
           <button
-            key={position}
-            onClick={() => onSelect(position)}
-            className="aspect-square text-3xl md:text-4xl font-bold bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-lg transition touch-target"
+            key={pos.label}
+            onClick={() => onSelect(pos.label)}
+            className="bg-blue-600 hover:bg-blue-700 active:scale-95 p-8 rounded-xl text-center transition transform duration-75 touch-none"
           >
-            {position}
+            <div className="text-5xl font-bold mb-2">{pos.label}</div>
+            <div className="text-sm text-gray-200">{pos.name}</div>
           </button>
         ))}
       </div>
-
-      <style jsx>{`
-        .touch-target {
-          min-height: 100px;
-        }
-      `}</style>
     </div>
   )
 }
