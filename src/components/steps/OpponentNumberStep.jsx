@@ -1,120 +1,68 @@
-import { useState, useRef } from 'react'
-import { Delete } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export default function OpponentNumberStep({ onSelect }) {
-  const [digit1, setDigit1] = useState('')
-  const [digit2, setDigit2] = useState('')
-  const digit2Ref = useRef(null)
+  const [digits, setDigits] = useState('')
 
-  const handleDigit1Click = (digit) => {
-    if (digit1 === '') {
-      setDigit1(digit)
-      // Auto-focus to digit2 after a brief delay
-      setTimeout(() => digit2Ref.current?.focus(), 100)
+  useEffect(() => {
+    if (digits.length === 2) {
+      const number = parseInt(digits)
+      onSelect(number)
+      setDigits('')
     }
-  }
+  }, [digits])
 
-  const handleDigit2Click = (digit) => {
-    if (digit2 === '') {
-      const newNumber = digit1 + digit
-      // Auto-submit after 2 digits complete
-      onSelect(parseInt(newNumber))
+  const handleDigit = (digit) => {
+    if (digits.length < 2) {
+      const newDigits = digits + digit
+      setDigits(newDigits)
     }
   }
 
   const handleBackspace = () => {
-    if (digit2 !== '') {
-      setDigit2('')
-    } else if (digit1 !== '') {
-      setDigit1('')
-    }
-  }
-
-  const handleKeyPress = (e, isDigit2) => {
-    if (e.key >= '0' && e.key <= '9') {
-      e.preventDefault()
-      if (isDigit2) {
-        handleDigit2Click(e.key)
-      } else {
-        handleDigit1Click(e.key)
-      }
-    } else if (e.key === 'Backspace') {
-      e.preventDefault()
-      handleBackspace()
-    }
+    setDigits(digits.slice(0, -1))
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center">
-      <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Gegenspieler (Wer?)</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <h2 className="text-4xl font-bold mb-8 text-center text-blue-400">
+        🔢 Gegenspieler (Trikotnummer)
+      </h2>
+      <p className="text-xl text-gray-300 mb-12 text-center">
+        Gib genau ZWEI Ziffern ein
+      </p>
 
-      {/* Display as two separate digit inputs */}
-      <div className="flex gap-6 mb-12 justify-center">
-        {/* Digit 1 */}
-        <input
-          type="text"
-          inputMode="numeric"
-          value={digit1}
-          onChange={() => {}}
-          onKeyDown={(e) => handleKeyPress(e, false)}
-          placeholder="0"
-          className="w-20 h-20 text-6xl text-center font-bold bg-gray-700 border-2 border-blue-500 rounded-lg focus:outline-none focus:border-blue-300"
-          readOnly
-        />
-
-        {/* Digit 2 */}
-        <input
-          ref={digit2Ref}
-          type="text"
-          inputMode="numeric"
-          value={digit2}
-          onChange={() => {}}
-          onKeyDown={(e) => handleKeyPress(e, true)}
-          placeholder="0"
-          className="w-20 h-20 text-6xl text-center font-bold bg-gray-700 border-2 border-green-500 rounded-lg focus:outline-none focus:border-green-300"
-          readOnly
-        />
+      <div className="bg-slate-800 border-2 border-blue-500 px-12 py-8 rounded-2xl text-6xl font-mono font-bold mb-12 min-w-[300px] text-center">
+        {digits || '_ _'}
       </div>
 
-      {/* Numpad Grid */}
-      <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm w-full px-4">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
+      <div className="grid grid-cols-3 gap-4 max-w-md w-full mb-8">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
           <button
-            key={digit}
-            onClick={() => digit2 === '' ? handleDigit1Click(digit.toString()) : handleDigit2Click(digit.toString())}
-            className="aspect-square text-4xl md:text-5xl font-bold bg-green-600 hover:bg-green-700 active:bg-green-800 rounded-lg transition touch-target"
+            key={num}
+            onClick={() => handleDigit(String(num))}
+            disabled={digits.length >= 2}
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed p-8 rounded-xl text-4xl font-bold transition touch-none"
           >
-            {digit}
+            {num}
           </button>
         ))}
+      </div>
 
-        {/* 0 Button */}
+      <div className="flex gap-4 max-w-md w-full">
         <button
-          onClick={() => digit2 === '' ? handleDigit1Click('0') : handleDigit2Click('0')}
-          className="col-span-2 aspect-square text-4xl md:text-5xl font-bold bg-green-600 hover:bg-green-700 active:bg-green-800 rounded-lg transition touch-target"
+          onClick={() => handleDigit('0')}
+          disabled={digits.length >= 2}
+          className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed p-8 rounded-xl text-4xl font-bold transition touch-none"
         >
           0
         </button>
-
-        {/* Backspace Button */}
         <button
           onClick={handleBackspace}
-          className="aspect-square flex items-center justify-center bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 rounded-lg transition touch-target"
+          className="flex-1 bg-red-600 hover:bg-red-700 p-8 rounded-xl text-xl font-bold transition touch-none"
         >
-          <Delete size={32} />
+          ⌫ Löschen
         </button>
       </div>
-
-      {/* Info */}
-      <div className="text-gray-400 text-sm mt-6">
-        Erste Ziffer → zweite Ziffer → automatisch OK ✓
-      </div>
-
-      <style jsx>{`
-        .touch-target {
-          min-height: 80px;
-        }
-      `}</style>
     </div>
   )
 }
