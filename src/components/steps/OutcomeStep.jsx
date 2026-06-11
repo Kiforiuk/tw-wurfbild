@@ -1,36 +1,35 @@
 export default function OutcomeStep({ onSelect }) {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-4">
-      <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Ergebnis (Was ist passiert?)</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <h2 className="text-4xl font-bold mb-12 text-center text-blue-400">
+        ⚽ Ergebnis (Was ist passiert?)
+      </h2>
 
-      <div className="w-full max-w-2xl space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
         <button
-          onClick={() => onSelect('Tor')}
-          className="w-full py-6 md:py-8 text-3xl md:text-4xl font-bold bg-red-600 hover:bg-red-700 active:bg-red-800 rounded-lg transition touch-target"
+          onClick={() => onSelect('tor')}
+          className="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 p-12 rounded-2xl text-center transition transform active:scale-95 touch-none"
         >
-          TOR 🎯
+          <div className="text-6xl mb-4">🎯</div>
+          <div className="text-3xl font-bold">TOR</div>
         </button>
 
         <button
-          onClick={() => onSelect('Gehalten')}
-          className="w-full py-6 md:py-8 text-3xl md:text-4xl font-bold bg-green-600 hover:bg-green-700 active:bg-green-800 rounded-lg transition touch-target"
+          onClick={() => onSelect('gehalten')}
+          className="bg-gradient-to-br from-green-600 to-green-800 hover:from-green-500 hover:to-green-700 p-12 rounded-2xl text-center transition transform active:scale-95 touch-none"
         >
-          GEHALTEN ✋
+          <div className="text-6xl mb-4">✋</div>
+          <div className="text-3xl font-bold">GEHALTEN</div>
         </button>
 
         <button
-          onClick={() => onSelect('Vorbei/Block')}
-          className="w-full py-6 md:py-8 text-3xl md:text-4xl font-bold bg-gray-600 hover:bg-gray-700 active:bg-gray-800 rounded-lg transition touch-target"
+          onClick={() => onSelect('vorbei')}
+          className="bg-gradient-to-br from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 p-12 rounded-2xl text-center transition transform active:scale-95 touch-none"
         >
-          VORBEI / BLOCK ❌
+          <div className="text-6xl mb-4">❌</div>
+          <div className="text-3xl font-bold">VORBEI</div>
         </button>
       </div>
-
-      <style jsx>{`
-        .touch-target {
-          min-height: 100px;
-        }
-      `}</style>
     </div>
   )
 }
