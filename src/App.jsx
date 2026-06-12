@@ -58,6 +58,12 @@ export default function App() {
     setCurrentStep(1)
   }
 
+  const deleteLastWurf = () => {
+    if (wurfe.length > 0) {
+      setWurfe(wurfe.slice(0, -1))
+    }
+  }
+
   const deleteAllWurfe = () => {
     if (window.confirm('⚠️ ALLE Daten werden gelöscht!\n\nDas kann nicht rückgängig gemacht werden.\n\nWirklich?')) {
       setWurfe([])
@@ -274,6 +280,8 @@ export default function App() {
             onAddWurf={addWurf}
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}
+            wurfe={wurfe}
+            onDeleteLast={deleteLastWurf}
           />
         ) : (
           <StatisticsTab wurfe={wurfe} />
