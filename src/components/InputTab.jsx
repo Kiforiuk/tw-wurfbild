@@ -49,7 +49,7 @@ export default function InputTab({ onAddWurf, currentStep, setCurrentStep, wurfe
   }
 
   return (
-    <div className="w-full flex flex-col gap-1">
+    <div className="w-full flex flex-col gap-0">
       <div className="flex-1">
         {currentStep === 1 && (
           <ShotPositionStep onSelect={handlePositionSelect} />
