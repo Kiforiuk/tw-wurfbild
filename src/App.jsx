@@ -7,7 +7,7 @@ import './App.css'
 export default function App() {
   const [currentTab, setCurrentTab] = useState('input')
   const [wurfe, setWurfe] = useState([])
-  const [currentTorwart, setCurrentTorwart] = useState('Pasqual')
+  const [currentTorwart, setCurrentTorwart] = useState('TW 1')
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -18,7 +18,7 @@ export default function App() {
     const savedState = localStorage.getItem('handball_state')
     if (savedState) {
       const state = JSON.parse(savedState)
-      setCurrentTorwart(state.currentTorwart || 'Pasqual')
+      setCurrentTorwart(state.currentTorwart || 'TW 1')
       setTimerSeconds(state.timerSeconds || 0)
     }
   }, [])
@@ -105,7 +105,7 @@ export default function App() {
         const importedWurfe = data.map((row, idx) => ({
           id: Date.now() + idx,
           time: row.time || '00:00',
-          torwart: row.torwart || 'Pasqual',
+          torwart: row.torwart || 'TW 1',
           gegenspieler: parseInt(row.gegenspieler) || 0,
           wurfposition: row.wurfposition || '',
           macroZone: parseInt(row.macroZone) || 0,
@@ -166,9 +166,9 @@ export default function App() {
                 onChange={(e) => setCurrentTorwart(e.target.value)}
                 className="bg-slate-700 border border-slate-600 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base cursor-pointer min-h-[44px]"
               >
-                <option>Pasqual</option>
-                <option>Mathi</option>
-                <option>Mitsch</option>
+                <option>TW 1</option>
+                <option>TW 2</option>
+                <option>TW 3</option>
               </select>
             </div>
 
