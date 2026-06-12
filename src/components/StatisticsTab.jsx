@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 
 export default function StatisticsTab({ wurfe }) {
   const [selectedGegenspieler, setSelectedGegenspieler] = useState(null)
+  const [zoomedMacroZone, setZoomedMacroZone] = useState(null)
 
   const gegenspielerList = useMemo(() => {
     const unique = new Set(wurfe.map(w => w.gegenspieler))
@@ -30,6 +31,26 @@ export default function StatisticsTab({ wurfe }) {
 
     return data
   }, [selectedWurfe])
+
+  const microZoneData = useMemo(() => {
+    if (!zoomedMacroZone) return {}
+
+    const data = {}
+    for (let i = 1; i <= 9; i++) {
+      data[i] = { count: 0, tore: 0 }
+    }
+
+    selectedWurfe
+      .filter(w => w.macroZone === zoomedMacroZone)
+      .forEach(w => {
+        if (data[w.microZone]) {
+          data[w.microZone].count++
+          if (w.ergebnis === 'tor') data[w.microZone].tore++
+        }
+      })
+
+    return data
+  }, [selectedWurfe, zoomedMacroZone])
 
   const getHeatmapColor = (count) => {
     if (count === 0) return 'bg-green-900'
@@ -95,20 +116,38 @@ export default function StatisticsTab({ wurfe }) {
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold mb-6 text-blue-400">🎯 Wurfzonen-Heatmap</h3>
+              <h3 className="text-2xl font-bold mb-6 text-blue-400">
+                {zoomedMacroZone ? `🔍 Makro-Zone ${zoomedMacroZone} (Mikro-Zonen)` : '🎯 Wurfzonen-Heatmap (Makro-Zonen)'}
+              </h3>
               <div className="bg-slate-800 p-8 rounded-lg mb-8">
+                {zoomedMacroZone && (
+                  <button
+                    onClick={() => setZoomedMacroZone(null)}
+                    className="mb-6 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-bold text-sm"
+                  >
+                    ← Zurück zu Makro-Zonen
+                  </button>
+                )}
                 <div className="grid grid-cols-3 gap-3 max-w-md">
                   {Array.from({ length: 9 }, (_, i) => {
                     const zone = i + 1
-                    const data = heatmapData[zone]
+                    const data = zoomedMacroZone ? microZoneData[zone] : heatmapData[zone]
                     const color = getHeatmapColor(data.count)
+                    const isClickable = !zoomedMacroZone && heatmapData[zone].count > 0
 
                     return (
                       <div
                         key={i}
-                        className={`${color} p-6 rounded-lg text-center border border-slate-600 transition`}
+                        onClick={() => {
+                          if (isClickable) setZoomedMacroZone(zone)
+                        }}
+                        className={`${color} p-6 rounded-lg text-center border border-slate-600 transition ${
+                          isClickable ? 'cursor-pointer hover:border-blue-400 hover:scale-105' : ''
+                        }`}
                       >
-                        <div className="text-sm text-gray-200">Zone {zone}</div>
+                        <div className="text-sm text-gray-200">
+                          {zoomedMacroZone ? `Mikro ${zone}` : `Zone ${zone}`}
+                        </div>
                         <div className="text-2xl font-bold text-white">{data.count}</div>
                         <div className="text-xs text-gray-300">
                           {data.tore}/{data.count} Tore
@@ -134,7 +173,9 @@ export default function StatisticsTab({ wurfe }) {
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold mb-4 text-blue-400">📋 Alle Würfe</h3>
+              <h3 className="text-2xl font-bold mb-4 text-blue-400">
+                {zoomedMacroZone ? `📋 Würfe in Makro-Zone ${zoomedMacroZone}` : '📋 Alle Würfe'}
+              </h3>
               <div className="overflow-x-auto bg-slate-800 rounded-lg">
                 <table className="w-full text-sm">
                   <thead>
@@ -148,20 +189,22 @@ export default function StatisticsTab({ wurfe }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedWurfe.map(w => (
-                      <tr key={w.id} className="border-b border-slate-700 hover:bg-slate-700">
-                        <td className="p-4">{w.time}</td>
-                        <td className="p-4">{w.torwart}</td>
-                        <td className="p-4">{w.wurfposition}</td>
-                        <td className="p-4">{w.macroZone}</td>
-                        <td className="p-4">{w.microZone}</td>
-                        <td className="p-4">
-                          {w.ergebnis === 'tor' && '🎯 TOR'}
-                          {w.ergebnis === 'gehalten' && '✋ GEHALTEN'}
-                          {w.ergebnis === 'vorbei' && '❌ VORBEI'}
-                        </td>
-                      </tr>
-                    ))}
+                    {selectedWurfe
+                      .filter(w => !zoomedMacroZone || w.macroZone === zoomedMacroZone)
+                      .map(w => (
+                        <tr key={w.id} className="border-b border-slate-700 hover:bg-slate-700">
+                          <td className="p-4">{w.time}</td>
+                          <td className="p-4">{w.torwart}</td>
+                          <td className="p-4">{w.wurfposition}</td>
+                          <td className="p-4">{w.macroZone}</td>
+                          <td className="p-4">{w.microZone}</td>
+                          <td className="p-4">
+                            {w.ergebnis === 'tor' && '🎯 TOR'}
+                            {w.ergebnis === 'gehalten' && '✋ GEHALTEN'}
+                            {w.ergebnis === 'vorbei' && '❌ VORBEI'}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
