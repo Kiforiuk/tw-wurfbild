@@ -49,7 +49,7 @@ export default function InputTab({ onAddWurf, currentStep, setCurrentStep, wurfe
   }
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-1">
       <div className="flex-1">
         {currentStep === 1 && (
           <ShotPositionStep onSelect={handlePositionSelect} />
@@ -76,7 +76,7 @@ export default function InputTab({ onAddWurf, currentStep, setCurrentStep, wurfe
 
       {wurfe.length > 0 && (
         <div className="bg-slate-800 rounded-lg p-4 max-h-64 overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-2">
             <h3 className="text-lg font-bold text-blue-400">📋 Würfe ({wurfe.length})</h3>
             {onDeleteLast && (
               <button
