@@ -23,30 +23,54 @@ export default function ImprintModal({ isOpen, onClose }) {
           <section>
             <h3 className="text-lg font-bold text-white mb-2">1. Angaben gemäß § 5 TMG</h3>
             <p>
-              <strong>Verein:</strong> [VEREINSNAME]
+              <strong>Anbieter:</strong> Alexander Kiforiuk
             </p>
-            <p className="text-sm text-gray-400 mt-2">
-              Bitte ergänzen Sie hier die offiziellen Vereinsangaben
+            <p>
+              <strong>Website:</strong> KI-KiFfi.com
+            </p>
+            <p>
+              <strong>Land:</strong> Deutschland
             </p>
           </section>
 
           {/* Kontakt */}
           <section>
             <h3 className="text-lg font-bold text-white mb-2">2. Kontaktinformationen</h3>
-            <p><strong>Email:</strong> [EMAIL]</p>
-            <p><strong>Telefon:</strong> [TELEFON]</p>
-            <p><strong>Website:</strong> [WEBSITE]</p>
+            <p><strong>Website:</strong> <a href="https://ki-kiffy.com" className="text-blue-400 hover:text-blue-300">KI-KiFfi.com</a></p>
+            <p><strong>Land:</strong> Deutschland</p>
           </section>
 
           {/* Verantwortlich */}
           <section>
             <h3 className="text-lg font-bold text-white mb-2">3. Verantwortlich für den Inhalt</h3>
-            <p>[VERANTWORTLICHE PERSON/FUNKTION]</p>
+            <p><strong>Alexander Kiforiuk</strong></p>
+            <p>KI-KiFfi.com</p>
+          </section>
+
+          {/* Software */}
+          <section>
+            <h3 className="text-lg font-bold text-white mb-2">4. Software & Entwicklung</h3>
+            <p>
+              <strong>Diese Software wurde entwickelt von:</strong>
+            </p>
+            <p className="text-sm mt-2">
+              <strong>Alexander Kiforiuk</strong><br />
+              KI-KiFfi.com<br />
+              Deutschland
+            </p>
+            <p className="text-sm mt-2">
+              <strong>Mit Claude Code</strong><br />
+              Anthropic AI Development<br />
+              <span className="text-xs text-gray-400">claude.com/claude-code</span>
+            </p>
+            <p className="text-xs text-gray-400 mt-3">
+              © 2026 Alexander Kiforiuk & Claude Code - Alle Rechte vorbehalten
+            </p>
           </section>
 
           {/* Haftung */}
           <section>
-            <h3 className="text-lg font-bold text-white mb-2">4. Haftungsausschluss</h3>
+            <h3 className="text-lg font-bold text-white mb-2">5. Haftungsausschluss</h3>
             <p className="text-sm">
               Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt.
               Wir übernehmen jedoch keine Gewähr für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte.

@@ -35,8 +35,8 @@ export default function Footer({ onOpenImprint, onOpenHelp }) {
 
         {/* Version & Copyright */}
         <div className="text-xs text-gray-500 text-right">
-          <p>v1.0.0</p>
-          <p>© 2026 Handball Verein</p>
+          <p>v1.0.0 | Entwickelt von Alexander Kiforiuk & Claude Code</p>
+          <p>© 2026 <a href="https://ki-kiffy.com" className="text-blue-400 hover:text-blue-300">KI-KiFfi.com</a></p>
         </div>
       </div>
     </footer>

@@ -8,10 +8,13 @@
 ## 📖 Inhaltsverzeichnis
 
 1. [Schnellstart](#schnellstart)
-2. [Würfe erfassen](#würfe-erfassen)
-3. [Statistiken anschauen](#statistiken-anschauen)
-4. [Daten verwalten](#daten-verwalten)
-5. [Häufig gestellte Fragen](#faq)
+2. [Interface & Header](#interface--header)
+3. [Würfe erfassen](#würfe-erfassen)
+4. [Statistiken anschauen](#statistiken-anschauen)
+5. [Daten verwalten](#daten-verwalten)
+6. [Sound-Effekte](#sound-effekte)
+7. [Impressum & Autoren](#impressum--autoren)
+8. [Häufig gestellte Fragen](#faq)
 
 ---
 
@@ -29,6 +32,33 @@
 4. **Wurfzone markieren** - Wähle Makro-Zone und Mikro-Zone
 5. **Ergebnis eintragen** - Tor, Gehalten oder Vorbei
 6. **Nächster Wurf** - Automatisch zur Step 1 zurück
+
+---
+
+## 🎨 Interface & Header
+
+### Header-Layout (3 Zeilen)
+
+**Zeile 1: Logos & Titel**
+- 🔵 **Links:** HSG Logo
+- 📍 **Mitte:** 🏐 Handball TW Analyse
+- 🔵 **Rechts:** SGU Logo (Untere Filz)
+
+**Zeile 2: Action-Buttons (gleichmäßig verteilt)**
+- 🗑️ **Alles Löschen** - Löscht alle erfassten Daten
+- 📥 **Importieren** - Importiert Excel/CSV-Dateien
+- 📤 **Exportieren** - Exportiert Daten als Excel-Datei
+- 📋 **Impressum** - Zeigt Informationen & Copyright
+
+**Zeile 3: Torwart + Timer + Tabs**
+- Torwart-Auswahl (TW 1, TW 2, TW 3)
+- Timer mit Play/Pause/Adjust-Buttons
+- Tab-Navigation (Input / Statistik-Auswertung)
+
+### Visuelle Elemente
+- **Wurfpositions-Seite:** Zwei Bilder links und rechts der 8 Positions-Buttons
+  - Diese dienen als visuelle Auflockerung des Interfaces
+  - Responsive: Nur auf Desktop sichtbar, Mobile zeigt Buttons fullscreen
 
 ---
 
@@ -204,6 +234,47 @@ ergebnis      Ergebnis (tor, gehalten, vorbei)
 - **Automatisches Speichern** - Alle Würfe werden sofort gespeichert
 - **Browser-Speicher** - Daten bleiben nach Neuladen erhalten
 - **Geräte-spezifisch** - Jeder Browser/Gerät hat eigene Daten
+
+---
+
+## 🔊 Sound-Effekte
+
+Die App verfügt über Ton-Signale, die beim Starten und Stoppen des Timers abspielen:
+
+| Event | Sound | Beschreibung |
+|-------|-------|-------------|
+| **Timer Start** (Play) | START.mp3 | Freundlicher Signalton wenn Timer startet |
+| **Timer Stop** (Pause) | STOP.mp3 | Signalton wenn Timer pausiert wird |
+
+### Lautstärke anpassen
+- Die Sounds spielen mit **50% Lautstärke** ab
+- Du kannst die Lautstärke deines Browsers/Geräts mit den Standard-Audiokontrollen anpassen
+- Falls du die Sounds nicht hörst:
+  - Überprüfe die Lautstärke deines Geräts
+  - Überprüfe, dass dein Browser Audio-Wiedergabe erlaubt
+  - Versuche die Seite neu zu laden (F5)
+
+---
+
+## 📋 Impressum & Autoren
+
+### Wer hat diese App entwickelt?
+
+Diese Software wurde entwickelt von:
+
+**🧑‍💻 Alexander Kiforiuk**
+- Website: [KI-KiFfi.com](https://ki-kiffy.com)
+- Land: Deutschland
+
+**🤖 Claude Code**
+- AI Development Partner
+- [claude.com/claude-code](https://claude.com/claude-code)
+
+### Copyright & Rechte
+© 2026 Alexander Kiforiuk & Claude Code - Alle Rechte vorbehalten
+
+### Impressum anzeigen
+Klick auf den **Impressum-Button** (oben rechts, Zeile 2) um das komplette Impressum mit weiteren Rechtsinformationen anzuzeigen.
 
 ---
 

@@ -5,10 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Handball Torwart Analyse</title>
-    <script type="module" crossorigin src="./dist/assets/index-2ae9e953.js"></script>
-    <link rel="stylesheet" href="./dist/assets/index-ec0844a5.css">
   </head>
   <body class="dark">
     <div id="root"></div>
+
+    <!-- Sound Effects -->
+    <audio id="startSound" preload="auto">
+      <source src="/sounds/START.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="stopSound" preload="auto">
+      <source src="/sounds/STOP.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

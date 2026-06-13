@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Trash2, Download, Upload, Play, Pause, RotateCcw } from 'lucide-react'
+import { Trash2, Download, Upload, Play, Pause, RotateCcw, FileText } from 'lucide-react'
 import InputTab from './components/InputTab'
 import StatisticsTab from './components/StatisticsTab'
+import ImprintModal from './components/ImprintModal'
 import './App.css'
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
+  const [showImprint, setShowImprint] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem('handball_wurfe')
@@ -73,20 +75,26 @@ export default function App() {
     }
   }
 
-  const playSound = (soundFile) => {
-    const audio = new Audio(`/sounds/${soundFile}.mp3`)
-    audio.volume = 0.5
-    audio.play().catch(err => console.error('Sound error:', err))
+  const playSound = (soundId) => {
+    try {
+      const audio = document.getElementById(soundId)
+      if (audio) {
+        audio.currentTime = 0
+        audio.play().catch(err => console.log('Sound play error:', err.message))
+      }
+    } catch (err) {
+      console.log('Sound error:', err.message)
+    }
   }
 
   const handleTimerButton = (action) => {
     if (action === 'play') {
       setIsTimerRunning(true)
-      playSound('START')
+      playSound('startSound')
     }
     if (action === 'pause') {
       setIsTimerRunning(false)
-      playSound('STOP')
+      playSound('stopSound')
     }
     if (action === 'plus1s') setTimerSeconds(s => s + 1)
     if (action === 'minus1s') setTimerSeconds(s => Math.max(0, s - 1))
@@ -183,33 +191,64 @@ export default function App() {
       {/* TOP-BAR: Fest oben verankert */}
       <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-b border-slate-700 z-50 p-4 md:p-6">
         <div className="max-w-7xl mx-auto space-y-4">
-          {/* Row 1: Title & Action Buttons */}
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <h1 className="text-2xl md:text-3xl font-bold text-blue-400">🏐 Handball TW Analyse</h1>
-
-            <div className="flex gap-3 flex-wrap">
-              <button
-                onClick={deleteAllWurfe}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-4 md:px-6 py-3 rounded-lg font-bold transition text-sm md:text-base min-h-[44px]"
-              >
-                <Trash2 size={20} />
-                <span className="hidden sm:inline">Alles Löschen</span>
-              </button>
-
-              <label htmlFor="import-file" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 md:px-6 py-3 rounded-lg font-bold cursor-pointer transition text-sm md:text-base min-h-[44px]">
-                <Upload size={20} />
-                <span className="hidden sm:inline">Importieren</span>
-                <input id="import-file" type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
-              </label>
-
-              <button
-                onClick={handleExport}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-4 md:px-6 py-3 rounded-lg font-bold transition text-sm md:text-base min-h-[44px]"
-              >
-                <Download size={20} />
-                <span className="hidden sm:inline">Exportieren</span>
-              </button>
+          {/* Row 1: Logos - Title - Logos */}
+          <div className="flex items-center justify-between gap-4">
+            {/* Left Logo */}
+            <div className="w-16 md:w-20">
+              <img
+                src="/logos/hsg-logo.jpg"
+                alt="HSG Logo"
+                className="h-12 md:h-16 w-auto rounded"
+                onError={(e) => e.target.style.display = 'none'}
+              />
             </div>
+
+            {/* Center Title */}
+            <h1 className="text-2xl md:text-3xl font-bold text-blue-400 text-center flex-1">🏐 Handball TW Analyse</h1>
+
+            {/* Right Logo */}
+            <div className="w-16 md:w-20">
+              <img
+                src="/logos/sgu-logo.bmp"
+                alt="SGU Logo"
+                className="h-12 md:h-16 w-auto rounded"
+                onError={(e) => e.target.style.display = 'none'}
+              />
+            </div>
+          </div>
+
+          {/* Row 2: Action Buttons - equally distributed */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={deleteAllWurfe}
+              className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 py-3 rounded-lg font-bold transition text-sm min-h-[44px] flex-1"
+            >
+              <Trash2 size={20} />
+              <span>Alles Löschen</span>
+            </button>
+
+            <label htmlFor="import-file" className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-bold cursor-pointer transition text-sm min-h-[44px] flex-1">
+              <Upload size={20} />
+              <span>Importieren</span>
+              <input id="import-file" type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
+            </label>
+
+            <button
+              onClick={handleExport}
+              className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 py-3 rounded-lg font-bold transition text-sm min-h-[44px] flex-1"
+            >
+              <Download size={20} />
+              <span>Exportieren</span>
+            </button>
+
+            <button
+              onClick={() => setShowImprint(true)}
+              className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 py-3 rounded-lg font-bold transition text-sm min-h-[44px] flex-1"
+              title="Impressum und Informationen anzeigen"
+            >
+              <FileText size={20} />
+              <span>Impressum</span>
+            </button>
           </div>
 
           {/* Row 2: Torwart + Timer + Tabs */}
@@ -337,6 +376,9 @@ export default function App() {
           <StatisticsTab wurfe={wurfe} />
         )}
       </div>
+
+      {/* Imprint Modal */}
+      <ImprintModal isOpen={showImprint} onClose={() => setShowImprint(false)} />
     </div>
   )
 }

@@ -128,33 +128,35 @@ export default function StatisticsTab({ wurfe }) {
                     ← Zurück zu Makro-Zonen
                   </button>
                 )}
-                <div className="grid grid-cols-3 gap-3 max-w-md">
-                  {Array.from({ length: 9 }, (_, i) => {
-                    const zone = i + 1
-                    const data = zoomedMacroZone ? microZoneData[zone] : heatmapData[zone]
-                    const color = getHeatmapColor(data.count)
-                    const isClickable = !zoomedMacroZone && heatmapData[zone].count > 0
 
-                    return (
-                      <div
-                        key={i}
-                        onClick={() => {
-                          if (isClickable) setZoomedMacroZone(zone)
-                        }}
-                        className={`${color} p-6 rounded-lg text-center border border-slate-600 transition ${
-                          isClickable ? 'cursor-pointer hover:border-blue-400 hover:scale-105' : ''
-                        }`}
-                      >
-                        <div className="text-sm text-gray-200">
-                          {zoomedMacroZone ? `Mikro ${zone}` : `Zone ${zone}`}
-                        </div>
-                        <div className="text-2xl font-bold text-white">{data.count}</div>
-                        <div className="text-xs text-gray-300">
-                          {data.tore}/{data.count} Tore
-                        </div>
-                      </div>
-                    )
-                  })}
+                {/* Heatmap Grid */}
+                <div className="grid grid-cols-3 gap-3 max-w-md">
+                      {Array.from({ length: 9 }, (_, i) => {
+                        const zone = i + 1
+                        const data = zoomedMacroZone ? microZoneData[zone] : heatmapData[zone]
+                        const color = getHeatmapColor(data.count)
+                        const isClickable = !zoomedMacroZone && heatmapData[zone].count > 0
+
+                        return (
+                          <div
+                            key={i}
+                            onClick={() => {
+                              if (isClickable) setZoomedMacroZone(zone)
+                            }}
+                            className={`${color} p-6 rounded-lg text-center border border-slate-600 transition ${
+                              isClickable ? 'cursor-pointer hover:border-blue-400 hover:scale-105' : ''
+                            }`}
+                          >
+                            <div className="text-sm text-gray-200">
+                              {zoomedMacroZone ? `Mikro ${zone}` : `Zone ${zone}`}
+                            </div>
+                            <div className="text-2xl font-bold text-white">{data.count}</div>
+                            <div className="text-xs text-gray-300">
+                              {data.tore}/{data.count} Tore
+                            </div>
+                          </div>
+                        )
+                      })}
                 </div>
 
                 <div className="mt-6 flex gap-4 text-sm">

@@ -25,6 +25,7 @@ Eine moderne Web-App zur Analyse von Handball-Schüssen. Trainer können Würfe 
 - **Makro-Zone:** 1-9 (3x3 Grid)
 - **Mikro-Zone:** 1-9 (fein Details)
 - **Ergebnis:** Tor 🎯 / Gehalten ✋ / Vorbei ❌
+- **Visuelle Unterstützung:** Bilder links/rechts der Wurfposition
 
 ### 2. Live-Wurflist
 - Chronologische Anzeige aller Würfe
@@ -43,8 +44,19 @@ Eine moderne Web-App zur Analyse von Handball-Schüssen. Trainer können Würfe 
 - **Flexible Spalten** (case-insensitive, mehrere Namen)
 - **Excel Export** - vollständiger Datensatz
 
-### 5. Timer
+### 5. Timer & Sound-Effekte
 - Play/Pause, ±1s/±1min, Reset
+- **🔊 Sound-Effekte:**
+  - START-Ton beim Starten des Timers
+  - STOP-Ton beim Pausieren des Timers
+
+### 6. Informationen & Impressum
+- **Impressum-Button** im Header (oben rechts)
+- Anzeige von:
+  - Entwickler-Informationen (Alexander Kiforiuk & Claude Code)
+  - Copyright & Rechtsinformationen
+  - Kontaktdaten & Website-Links
+- **HSG + SGU Logos** prominent im Header
 
 ## 🚀 Development
 
@@ -80,11 +92,15 @@ npm run preview          # Preview build
 }
 ```
 
-## 🐛 Known Issues
+## ✅ Features Implemented
 
-- Vereinslogo noch nicht integriert
-- Impressum noch nicht implementiert
-- Download-Feature noch nicht verfügbar
+- ✅ Vereinslogos (HSG + SGU) im Header
+- ✅ Impressum mit Author-Informationen
+- ✅ Sound-Effekte (START/STOP)
+- ✅ Visuelle Bilder bei Wurfposition
+- ✅ Dreizeiliger, übersichtlicher Header
+- ✅ Responsive Design für Mobile & Desktop
+- ✅ Export/Import mit flexiblen Spaltenbezeichnungen
 
 ---
 
