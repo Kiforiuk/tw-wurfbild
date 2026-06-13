@@ -104,27 +104,65 @@ export default function App() {
     reader.onload = async (event) => {
       try {
         const XLSX = await import('xlsx')
-        const wb = XLSX.read(event.target.result, { type: 'array' })
-        const ws = wb.Sheets[wb.SheetNames[0]]
-        const data = XLSX.utils.sheet_to_json(ws)
 
-        const importedWurfe = data.map((row, idx) => ({
-          id: Date.now() + idx,
-          time: row.time || '00:00',
-          torwart: row.torwart || 'TW 1',
-          gegenspieler: parseInt(row.gegenspieler) || 0,
-          wurfposition: row.wurfposition || '',
-          macroZone: parseInt(row.macroZone) || 0,
-          microZone: parseInt(row.microZone) || 0,
-          ergebnis: row.ergebnis || ''
-        }))
+        // Read file with different type based on file extension
+        let wb
+        const fileName = file.name.toLowerCase()
+        if (fileName.endsWith('.csv')) {
+          // For CSV, read as text first
+          const csvText = new TextDecoder().decode(event.target.result)
+          wb = XLSX.read(csvText, { type: 'string' })
+        } else {
+          // For Excel files, read as array buffer
+          wb = XLSX.read(event.target.result, { type: 'array' })
+        }
+
+        const ws = wb.Sheets[wb.SheetNames[0]]
+        const data = XLSX.utils.sheet_to_json(ws, { defval: '' })
+
+        // Normalize column names to handle different cases and variations
+        const normalizedData = data.map(row => {
+          const normalized = {}
+          Object.keys(row).forEach(key => {
+            const lowerKey = key.toLowerCase().trim()
+            if (lowerKey === 'time' || lowerKey === 'zeit') normalized.time = row[key]
+            else if (lowerKey === 'torwart' || lowerKey === 'tw' || lowerKey === 'goalkeeper') normalized.torwart = row[key]
+            else if (lowerKey === 'gegenspieler' || lowerKey === 'opponent' || lowerKey === 'spieler' || lowerKey === '#') normalized.gegenspieler = row[key]
+            else if (lowerKey === 'wurfposition' || lowerKey === 'position' || lowerKey === 'pos') normalized.wurfposition = row[key]
+            else if (lowerKey === 'macrozone' || lowerKey === 'macro' || lowerKey === 'grob' || lowerKey === 'zone') normalized.macroZone = row[key]
+            else if (lowerKey === 'microzone' || lowerKey === 'micro' || lowerKey === 'fein') normalized.microZone = row[key]
+            else if (lowerKey === 'ergebnis' || lowerKey === 'result' || lowerKey === 'outcome') normalized.ergebnis = row[key]
+          })
+          return normalized
+        })
+
+        const importedWurfe = normalizedData
+          .filter(row => row.gegenspieler || row.wurfposition || row.ergebnis) // Filter out empty rows
+          .map((row, idx) => ({
+            id: Date.now() + idx,
+            time: String(row.time || '00:00'),
+            torwart: String(row.torwart || 'TW 1'),
+            gegenspieler: parseInt(row.gegenspieler) || 0,
+            wurfposition: String(row.wurfposition || ''),
+            macroZone: parseInt(row.macroZone) || 0,
+            microZone: parseInt(row.microZone) || 0,
+            ergebnis: String(row.ergebnis || '')
+          }))
+
+        if (importedWurfe.length === 0) {
+          alert('⚠️ Keine gültigen Würfe in der Datei gefunden. Bitte überprüfe das Format.')
+          return
+        }
 
         setWurfe([...wurfe, ...importedWurfe])
         alert(`✅ ${importedWurfe.length} Würfe importiert!`)
       } catch (err) {
-        alert('❌ Import fehlgeschlagen: ' + err.message)
+        console.error('Import error:', err)
+        alert('❌ Import fehlgeschlagen: ' + err.message + '\n\nBitte überprüfe, dass die Datei im Excel-Format ist und die erwarteten Spalten enthält.')
       }
     }
+
+    // Read file as array buffer (works for both Excel and CSV)
     reader.readAsArrayBuffer(file)
   }
 
@@ -146,10 +184,10 @@ export default function App() {
                 <span className="hidden sm:inline">Alles Löschen</span>
               </button>
 
-              <label className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 md:px-6 py-3 rounded-lg font-bold cursor-pointer transition text-sm md:text-base min-h-[44px]">
+              <label htmlFor="import-file" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 md:px-6 py-3 rounded-lg font-bold cursor-pointer transition text-sm md:text-base min-h-[44px]">
                 <Upload size={20} />
                 <span className="hidden sm:inline">Importieren</span>
-                <input type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
+                <input id="import-file" type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
               </label>
 
               <button

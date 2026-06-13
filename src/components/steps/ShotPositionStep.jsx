@@ -11,8 +11,8 @@ export default function ShotPositionStep({ onSelect }) {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h2 className="text-4xl font-bold mb-12 text-center text-blue-400">
+    <div className="w-full flex flex-col items-center p-4" style={{ minHeight: 'auto' }}>
+      <h2 className="text-4xl font-bold text-center text-blue-400" style={{ marginBottom: '4px' }}>
         📍 Wurfposition (Woher?)
       </h2>
 
