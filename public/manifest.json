@@ -1,0 +1,34 @@
+{
+  "name": "Handball Torwart Analyse",
+  "short_name": "TW Analyse",
+  "description": "Echtzeit-Analyse von Handball-Schüssen für Torwarttrainer",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logos/hsg-logo.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/logos/sgu-logo.bmp",
+      "sizes": "any",
+      "type": "image/bmp",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["sports", "productivity"],
+  "screenshots": [
+    {
+      "src": "/images/image1.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
