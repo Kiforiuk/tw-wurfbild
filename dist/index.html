@@ -4,13 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1e293b">
+    <meta name="description" content="Echtzeit-Analyse von Handball-Schüssen für Torwarttrainer">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./logos/hsg-logo.jpg">
     <title>Handball Torwart Analyse</title>
-    
-    
-    <script type="module" crossorigin src="./assets/index-916e813a.js"></script>
-    <link rel="stylesheet" href="./assets/index-ec0844a5.css">
+    <script type="module" crossorigin src="./assets/index-2537bda6.js"></script>
+    <link rel="stylesheet" href="./assets/index-a5800b9b.css">
   </head>
   <body class="dark">
     <div id="root"></div>
+
+    <!-- Sound Effects -->
+    <audio id="startSound" preload="auto">
+      <source src="./sounds/START.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="stopSound" preload="auto">
+      <source src="./sounds/STOP.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(err =>
+          console.log('Service Worker registration failed:', err)
+        )
+      }
+    </script>
+
+    
   </body>
 </html>
