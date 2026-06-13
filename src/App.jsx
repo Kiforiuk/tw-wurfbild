@@ -73,9 +73,21 @@ export default function App() {
     }
   }
 
+  const playSound = (soundFile) => {
+    const audio = new Audio(`/sounds/${soundFile}.mp3`)
+    audio.volume = 0.5
+    audio.play().catch(err => console.error('Sound error:', err))
+  }
+
   const handleTimerButton = (action) => {
-    if (action === 'play') setIsTimerRunning(true)
-    if (action === 'pause') setIsTimerRunning(false)
+    if (action === 'play') {
+      setIsTimerRunning(true)
+      playSound('START')
+    }
+    if (action === 'pause') {
+      setIsTimerRunning(false)
+      playSound('STOP')
+    }
     if (action === 'plus1s') setTimerSeconds(s => s + 1)
     if (action === 'minus1s') setTimerSeconds(s => Math.max(0, s - 1))
     if (action === 'plus1m') setTimerSeconds(s => s + 60)
