@@ -263,7 +263,7 @@ export default function App() {
               <select
                 value={currentTorwart}
                 onChange={(e) => setCurrentTorwart(e.target.value)}
-                className="bg-slate-700 border border-slate-600 text-white px-2 md:px-4 py-1 md:py-3 rounded-lg font-bold text-xs md:text-base cursor-pointer min-h-[40px] md:min-h-[44px]"
+                className="bg-slate-700 border border-slate-600 text-white px-2 md:px-4 py-2 md:py-3 rounded-lg font-bold text-xs md:text-base cursor-pointer min-h-[44px]"
               >
                 <option>TW 1</option>
                 <option>TW 2</option>
