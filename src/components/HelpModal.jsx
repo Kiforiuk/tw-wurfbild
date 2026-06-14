@@ -42,35 +42,34 @@ export default function HelpModal({ isOpen, onClose }) {
   ]
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-800 rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 md:p-4">
+      <div className="bg-slate-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-slate-700 sticky top-0 bg-slate-800">
-          <h2 className="text-2xl font-bold text-blue-400">❓ Hilfe & FAQ</h2>
+        <div className="flex justify-between items-center p-3 md:p-6 border-b border-slate-700 sticky top-0 bg-slate-800">
+          <h2 className="text-lg md:text-2xl font-bold text-blue-400">❓ Hilfe & FAQ</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition"
           >
-            <X size={24} />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-2">
+        <div className="p-3 md:p-6 space-y-2">
           {sections.map((section, idx) => (
             <div key={idx} className="border border-slate-700 rounded-lg overflow-hidden">
               <button
                 onClick={() => setExpandedSection(expandedSection === idx ? -1 : idx)}
-                className="w-full p-4 flex justify-between items-center hover:bg-slate-700 transition"
+                className="w-full p-2 md:p-4 flex justify-between items-center hover:bg-slate-700 transition min-h-[44px]"
               >
-                <span className="font-bold text-blue-400 text-left">{section.title}</span>
+                <span className="font-bold text-blue-400 text-left text-sm md:text-base">{section.title}</span>
                 <ChevronDown
-                  size={20}
-                  className={`transform transition ${expandedSection === idx ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 md:w-6 md:h-6 transform transition flex-shrink-0 ml-2 ${expandedSection === idx ? 'rotate-180' : ''}`}
                 />
               </button>
               {expandedSection === idx && (
-                <div className="p-4 bg-slate-900 border-t border-slate-700 text-gray-300">
+                <div className="p-3 md:p-4 bg-slate-900 border-t border-slate-700 text-gray-300 text-sm md:text-base">
                   {section.content}
                 </div>
               )}
@@ -79,10 +78,10 @@ export default function HelpModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-slate-700 bg-slate-900">
+        <div className="p-3 md:p-6 border-t border-slate-700 bg-slate-900">
           <button
             onClick={onClose}
-            className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-bold transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 px-3 md:px-4 py-2 rounded-lg font-bold transition text-sm md:text-base min-h-[44px]"
           >
             Schließen
           </button>

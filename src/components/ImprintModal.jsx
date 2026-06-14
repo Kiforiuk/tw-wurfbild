@@ -4,21 +4,21 @@ export default function ImprintModal({ isOpen, onClose }) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-800 rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 md:p-4">
+      <div className="bg-slate-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-slate-700 sticky top-0 bg-slate-800">
-          <h2 className="text-2xl font-bold text-blue-400">Impressum</h2>
+        <div className="flex justify-between items-center p-3 md:p-6 border-b border-slate-700 sticky top-0 bg-slate-800">
+          <h2 className="text-lg md:text-2xl font-bold text-blue-400">Impressum</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition"
           >
-            <X size={24} />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 text-gray-300 space-y-6">
+        <div className="p-3 md:p-6 text-gray-300 space-y-4 md:space-y-6">
           {/* Angaben gemäß TMG */}
           <section>
             <h3 className="text-lg font-bold text-white mb-2">1. Angaben gemäß § 5 TMG</h3>
@@ -89,10 +89,10 @@ export default function ImprintModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-slate-700 bg-slate-900">
+        <div className="p-3 md:p-6 border-t border-slate-700 bg-slate-900">
           <button
             onClick={onClose}
-            className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-bold transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 px-3 md:px-4 py-2 md:py-2 rounded-lg font-bold transition text-sm md:text-base"
           >
             Schließen
           </button>

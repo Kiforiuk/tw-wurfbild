@@ -221,15 +221,15 @@ export default function App() {
           <div className="flex items-center gap-1 md:gap-3 flex-wrap">
             <button
               onClick={deleteAllWurfe}
-              className="flex items-center justify-center gap-1 md:gap-2 bg-red-600 hover:bg-red-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[40px] md:min-h-[44px] flex-1"
+              className="flex items-center justify-center gap-1 md:gap-2 bg-red-600 hover:bg-red-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
             >
-              <Trash2 size={16} className="md:size-20" />
+              <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Alles Löschen</span>
               <span className="sm:hidden">Löschen</span>
             </button>
 
-            <label htmlFor="import-file" className="flex items-center justify-center gap-1 md:gap-2 bg-blue-600 hover:bg-blue-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold cursor-pointer transition text-xs md:text-sm min-h-[40px] md:min-h-[44px] flex-1">
-              <Upload size={16} className="md:size-20" />
+            <label htmlFor="import-file" className="flex items-center justify-center gap-1 md:gap-2 bg-blue-600 hover:bg-blue-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold cursor-pointer transition text-xs md:text-sm min-h-[44px] flex-1">
+              <Upload className="w-4 h-4 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Importieren</span>
               <span className="sm:hidden">Import</span>
               <input id="import-file" type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
@@ -237,19 +237,19 @@ export default function App() {
 
             <button
               onClick={handleExport}
-              className="flex items-center justify-center gap-1 md:gap-2 bg-green-600 hover:bg-green-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[40px] md:min-h-[44px] flex-1"
+              className="flex items-center justify-center gap-1 md:gap-2 bg-green-600 hover:bg-green-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
             >
-              <Download size={16} className="md:size-20" />
+              <Download className="w-4 h-4 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Exportieren</span>
               <span className="sm:hidden">Export</span>
             </button>
 
             <button
               onClick={() => setShowImprint(true)}
-              className="flex items-center justify-center gap-1 md:gap-2 bg-purple-600 hover:bg-purple-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[40px] md:min-h-[44px] flex-1"
+              className="flex items-center justify-center gap-1 md:gap-2 bg-purple-600 hover:bg-purple-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
               title="Impressum und Informationen anzeigen"
             >
-              <FileText size={16} className="md:size-20" />
+              <FileText className="w-4 h-4 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Impressum</span>
               <span className="sm:hidden">Info</span>
             </button>
@@ -281,18 +281,18 @@ export default function App() {
                 {!isTimerRunning ? (
                   <button
                     onClick={() => handleTimerButton('play')}
-                    className="bg-green-600 hover:bg-green-700 p-1 md:p-3 rounded-lg transition min-h-[36px] md:min-h-[44px] min-w-[36px] md:min-w-[44px] flex items-center justify-center"
+                    className="bg-green-600 hover:bg-green-700 p-2 md:p-3 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center"
                     title="Start"
                   >
-                    <Play size={14} className="md:size-6" />
+                    <Play className="w-3.5 h-3.5 md:w-5 md:h-5" />
                   </button>
                 ) : (
                   <button
                     onClick={() => handleTimerButton('pause')}
-                    className="bg-yellow-600 hover:bg-yellow-700 p-1 md:p-3 rounded-lg transition min-h-[36px] md:min-h-[44px] min-w-[36px] md:min-w-[44px] flex items-center justify-center"
+                    className="bg-yellow-600 hover:bg-yellow-700 p-2 md:p-3 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center"
                     title="Pause"
                   >
-                    <Pause size={14} className="md:size-6" />
+                    <Pause className="w-3.5 h-3.5 md:w-5 md:h-5" />
                   </button>
                 )}
 
@@ -300,38 +300,38 @@ export default function App() {
                   <>
                     <button
                       onClick={() => handleTimerButton('plus1s')}
-                      className="bg-blue-600 hover:bg-blue-700 px-1 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[36px] md:min-h-[44px]"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
                       title="+1 Sekunde"
                     >
                       +1s
                     </button>
                     <button
                       onClick={() => handleTimerButton('minus1s')}
-                      className="bg-blue-600 hover:bg-blue-700 px-1 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[36px] md:min-h-[44px]"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
                       title="-1 Sekunde"
                     >
                       -1s
                     </button>
                     <button
                       onClick={() => handleTimerButton('plus1m')}
-                      className="bg-blue-600 hover:bg-blue-700 px-1 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[36px] md:min-h-[44px]"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
                       title="+1 Minute"
                     >
                       +1m
                     </button>
                     <button
                       onClick={() => handleTimerButton('minus1m')}
-                      className="bg-blue-600 hover:bg-blue-700 px-1 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[36px] md:min-h-[44px]"
+                      className="bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-3 rounded-lg text-xs md:text-sm font-bold transition min-h-[44px]"
                       title="-1 Minute"
                     >
                       -1m
                     </button>
                     <button
                       onClick={() => handleTimerButton('reset')}
-                      className="bg-red-600 hover:bg-red-700 p-1 md:p-3 rounded-lg transition min-h-[36px] md:min-h-[44px] min-w-[36px] md:min-w-[44px] flex items-center justify-center"
+                      className="bg-red-600 hover:bg-red-700 p-2 md:p-3 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center"
                       title="Zurücksetzen"
                     >
-                      <RotateCcw size={14} className="md:size-6" />
+                      <RotateCcw className="w-3.5 h-3.5 md:w-5 md:h-5" />
                     </button>
                   </>
                 )}
@@ -342,7 +342,7 @@ export default function App() {
             <div className="flex gap-1 md:gap-2">
               <button
                 onClick={() => setCurrentTab('input')}
-                className={`px-2 md:px-6 py-1 md:py-3 rounded-lg font-bold text-xs md:text-base transition min-h-[36px] md:min-h-[44px] ${
+                className={`px-2 md:px-6 py-1 md:py-3 rounded-lg font-bold text-xs md:text-base transition min-h-[44px] ${
                   currentTab === 'input'
                     ? 'bg-blue-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -353,7 +353,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setCurrentTab('stats')}
-                className={`px-2 md:px-6 py-1 md:py-3 rounded-lg font-bold text-xs md:text-base transition min-h-[36px] md:min-h-[44px] ${
+                className={`px-2 md:px-6 py-1 md:py-3 rounded-lg font-bold text-xs md:text-base transition min-h-[44px] ${
                   currentTab === 'stats'
                     ? 'bg-blue-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
