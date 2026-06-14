@@ -13,8 +13,6 @@ export default function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [showImprint, setShowImprint] = useState(false)
-  const [deferredPrompt, setDeferredPrompt] = useState(null)
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem('handball_wurfe')
@@ -25,16 +23,6 @@ export default function App() {
       setCurrentTorwart(state.currentTorwart || 'TW 1')
       setTimerSeconds(state.timerSeconds || 0)
     }
-
-    // PWA Install Prompt Handler
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setShowInstallPrompt(true)
-    }
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
   }, [])
 
   useEffect(() => {
@@ -125,17 +113,6 @@ export default function App() {
       alert('✅ Exportiert!')
     } catch (err) {
       alert('❌ Export fehlgeschlagen')
-    }
-  }
-
-  const handleInstallApp = async () => {
-    if (!deferredPrompt) return
-    deferredPrompt.prompt()
-    const { outcome } = await deferredPrompt.userChoice
-    if (outcome === 'accepted') {
-      setDeferredPrompt(null)
-      setShowInstallPrompt(false)
-      alert('✅ App installiert! Jetzt kannst du sie offline nutzen.')
     }
   }
 
@@ -276,18 +253,6 @@ export default function App() {
               <span className="hidden sm:inline">Impressum</span>
               <span className="sm:hidden">Info</span>
             </button>
-
-            {showInstallPrompt && (
-              <button
-                onClick={handleInstallApp}
-                className="flex items-center justify-center gap-1 md:gap-2 bg-cyan-600 hover:bg-cyan-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[40px] md:min-h-[44px] flex-1 animate-pulse"
-                title="App auf Gerät installieren und offline nutzen"
-              >
-                <Download size={16} className="md:size-20" />
-                <span className="hidden sm:inline">App Installieren</span>
-                <span className="sm:hidden">Install</span>
-              </button>
-            )}
           </div>
 
           {/* Row 3: Torwart + Timer + Tabs */}
