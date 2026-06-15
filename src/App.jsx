@@ -189,36 +189,36 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* TOP-BAR: Fest oben verankert */}
-      <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-b border-slate-700 z-50 p-2 md:p-6">
-        <div className="max-w-7xl mx-auto space-y-2 md:space-y-4">
-          {/* Row 1: Logos - Title - Logos */}
-          <div className="flex items-center justify-between gap-2 md:gap-4">
+      <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-b border-slate-700 z-50 p-1 md:p-6">
+        <div className="max-w-7xl mx-auto space-y-1 md:space-y-4">
+          {/* Row 1: Logos - Title - Logos (hide on very small) */}
+          <div className="hidden sm:flex items-center justify-between gap-1 md:gap-4">
             {/* Left Logo */}
-            <div className="w-10 md:w-20">
+            <div className="w-8 md:w-20">
               <img
                 src="/logos/hsg-logo.jpg"
                 alt="HSG Logo"
-                className="h-8 md:h-16 w-auto rounded"
+                className="h-6 md:h-16 w-auto rounded"
                 onError={(e) => e.target.style.display = 'none'}
               />
             </div>
 
             {/* Center Title */}
-            <h1 className="text-lg md:text-3xl font-bold text-blue-400 text-center flex-1">🏐 Handball TW Analyse</h1>
+            <h1 className="text-sm md:text-3xl font-bold text-blue-400 text-center flex-1">🏐 Handball TW Analyse</h1>
 
             {/* Right Logo */}
-            <div className="w-10 md:w-20">
+            <div className="w-8 md:w-20">
               <img
                 src="/logos/sgu-logo.bmp"
                 alt="SGU Logo"
-                className="h-8 md:h-16 w-auto rounded"
+                className="h-6 md:h-16 w-auto rounded"
                 onError={(e) => e.target.style.display = 'none'}
               />
             </div>
           </div>
 
-          {/* Row 2: Action Buttons - equally distributed */}
-          <div className="flex items-center gap-1 md:gap-3 flex-wrap">
+          {/* Row 2: Action Buttons - grid on mobile, row on desktop */}
+          <div className="grid grid-cols-2 md:flex md:gap-3 gap-1">
             <button
               onClick={deleteAllWurfe}
               className="flex items-center justify-center gap-1 md:gap-2 bg-red-600 hover:bg-red-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
@@ -367,7 +367,7 @@ export default function App() {
       </div>
 
       {/* CONTENT AREA */}
-      <div className="pt-[180px] md:pt-[280px] pb-8 px-4 max-w-7xl mx-auto">
+      <div className="pt-[140px] md:pt-[280px] pb-8 px-2 md:px-4 max-w-7xl mx-auto">
         {currentTab === 'input' ? (
           <InputTab
             onAddWurf={addWurf}
