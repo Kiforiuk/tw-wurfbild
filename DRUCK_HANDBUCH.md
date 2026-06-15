@@ -305,19 +305,62 @@ Die App gibt **Ton-Signale** ab:
 
 ## ❓ HÄUFIG GESTELLTE FRAGEN
 
+### Wie komme ich an die App?
+
+**Einfach Link öffnen!**
+
+1. **Im Browser:** Geben Sie ein: `https://tw-wurfbild.ki-kiffy.com`
+2. **App lädt sich herunter** (beim 1. Mal mit Internet)
+3. **Service Worker speichert alles lokal**
+4. **Fertig!** - App ist jetzt auf Ihrem Gerät
+
+**Optional - App auf Homescreen speichern:**
+- **Android (Chrome):** 3-Punkte-Menü → "Zum Startbildschirm hinzufügen"
+- **iPhone (Safari):** Teilen → "Zum Homebildschirm"
+- **Desktop:** Favorit/Lesezeichen speichern
+
 ### Funktioniert die App ohne Internet?
 
-**Ja!** Die App funktioniert offline:
-- Würfe werden **lokal gespeichert**
-- Internet wird nur zum Laden benötigt
-- Zum **Export/Import** brauchen Sie Internet
+**Ja, 100%!** Nach dem 1. Laden funktioniert die App komplett offline:
+
+**Was funktioniert offline:**
+- ✅ Würfe erfassen (5-Schritt Wizard)
+- ✅ Timer starten/stoppen/anpassen
+- ✅ Statistiken anschauen
+- ✅ Daten exportieren (lokal speichern)
+- ✅ Daten importieren (von der Festplatte)
+
+**Wie das funktioniert:**
+1. **1. Mal:** Sie öffnen den Link mit Internet
+2. **Service Worker:** Speichert die komplette App lokal auf Ihrem Gerät
+3. **Danach:** App startet **immer offline** - kein Internet nötig
+4. **Daten:** Werden lokal im Browser-Speicher gespeichert
+
+**Praktisches Szenario beim Handball:**
+- Daheim: Link öffnen → App lädt (mit WiFi)
+- Spielfeld: Handy aufmachen → App startet offline ✅
+- Alle Würfe erfassen → alles funktioniert
+- Daheim: App online gehen → Daten können exportiert werden
 
 ### Wie lange werden meine Daten gespeichert?
 
 **Solange Sie den Browser-Cache nicht löschen:**
-- Daten sind lokal im Browser gespeichert
-- Beim Leeren des Cache gehen die Daten verloren
-- **Empfehlung:** Regelmäßig **Exportieren** (Backup)!
+- Daten sind lokal im Browser-Speicher (localStorage) gespeichert
+- Speicherplatz: Üblicherweise 5-10 MB verfügbar
+- **Solange das Handy/der PC nicht formatiert wird:** Daten bleiben erhalten
+- Beim absichtlichen Löschen des Browser-Cache gehen die Daten verloren
+
+**Wichtig - Backup-Strategie:**
+- Nach jedem Spiel: **Exportieren** (Excel-Datei)
+- Datei speichern auf PC/Cloud
+- Bei Bedarf später wieder Importieren
+
+**Beispiel:**
+```
+Spiel 1: Würfe erfassen → Exportieren → Datei speichern
+Spiel 2: Neue Würfe erfassen → Exportieren → Datei speichern
+Spiel 3: Alte Würfe importieren (optional) → weitermachen
+```
 
 ### Kann ich auf mehreren Geräten arbeiten?
 
