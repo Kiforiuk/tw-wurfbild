@@ -223,13 +223,13 @@ export default function App() {
               onClick={deleteAllWurfe}
               className="flex items-center justify-center gap-1 md:gap-2 bg-red-600 hover:bg-red-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
             >
-              <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
+              <Trash2 className="w-6 h-6 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Alles Löschen</span>
               <span className="sm:hidden">Löschen</span>
             </button>
 
             <label htmlFor="import-file" className="flex items-center justify-center gap-1 md:gap-2 bg-blue-600 hover:bg-blue-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold cursor-pointer transition text-xs md:text-sm min-h-[44px] flex-1">
-              <Upload className="w-4 h-4 md:w-5 md:h-5" />
+              <Upload className="w-6 h-6 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Importieren</span>
               <span className="sm:hidden">Import</span>
               <input id="import-file" type="file" onChange={handleImport} accept=".xlsx,.xls,.csv" hidden />
@@ -239,7 +239,7 @@ export default function App() {
               onClick={handleExport}
               className="flex items-center justify-center gap-1 md:gap-2 bg-green-600 hover:bg-green-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
             >
-              <Download className="w-4 h-4 md:w-5 md:h-5" />
+              <Download className="w-6 h-6 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Exportieren</span>
               <span className="sm:hidden">Export</span>
             </button>
@@ -249,7 +249,7 @@ export default function App() {
               className="flex items-center justify-center gap-1 md:gap-2 bg-purple-600 hover:bg-purple-700 py-2 md:py-3 px-2 md:px-3 rounded-lg font-bold transition text-xs md:text-sm min-h-[44px] flex-1"
               title="Impressum und Informationen anzeigen"
             >
-              <FileText className="w-4 h-4 md:w-5 md:h-5" />
+              <FileText className="w-6 h-6 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Impressum</span>
               <span className="sm:hidden">Info</span>
             </button>
