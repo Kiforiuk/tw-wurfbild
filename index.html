@@ -2,23 +2,25 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="./public/logos/hsg-logo.jpg" />
+    <link rel="icon" type="image/jpeg" href="./assets/hsg-logo-1a398e56.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#1e293b">
     <meta name="description" content="Echtzeit-Analyse von Handball-Schüssen für Torwarttrainer">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/logos/hsg-logo.jpg">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./logos/hsg-logo.jpg">
     <title>Handball Torwart Analyse</title>
+    <script type="module" crossorigin src="./assets/index-3aee0f98.js"></script>
+    <link rel="stylesheet" href="./assets/index-4c154845.css">
   </head>
   <body class="dark">
     <div id="root"></div>
 
     <!-- Sound Effects -->
     <audio id="startSound" preload="auto">
-      <source src="/sounds/START.mp3" type="audio/mpeg" />
+      <source src="./sounds/START.mp3" type="audio/mpeg" />
     </audio>
     <audio id="stopSound" preload="auto">
-      <source src="/sounds/STOP.mp3" type="audio/mpeg" />
+      <source src="./sounds/STOP.mp3" type="audio/mpeg" />
     </audio>
 
     <script>
@@ -29,6 +31,6 @@
       }
     </script>
 
-    <script type="module" src="/src/main.jsx"></script>
+    
   </body>
 </html>
